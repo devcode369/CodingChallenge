@@ -5,3 +5,5 @@
 /.vs
 /MineSweepers/bin/Debug/net8.0-windows
 /MineSweepers/obj
+/ChessGame/bin/Debug/net8.0-windows
+/ChessGame/obj
