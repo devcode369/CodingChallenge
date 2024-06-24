@@ -1,32 +1,34 @@
-﻿
-namespace MineSweepers
+﻿namespace MineSweepers
 {
     using System;
     using System.Drawing;
     using System.Windows.Forms;
 
-
-    public partial class MinesSweeper : Form
+    public partial class Minesweeper : Form
     {
-        private const int numRows = 24;
-        private const int numCols = 24;
-        private const int numMines = 99;
-        private int flagCount = numMines;
+        private int numRows = 24;
+        private int numCols = 24;
+        private int numMines = 99;
+        private int flagCount = 0;
         private int[,] gameBoard;
         private Button[,] buttons;
         private readonly int[] dRow = { -1, -1, -1, 0, 1, 1, 1, 0 };
-        private Button button2;
         private readonly int[] dCol = { -1, 0, 1, 1, 1, 0, -1, -1 };
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button1;
+        private Button button1;
+        private Button button2;
+        private Panel panel1;
+        private Panel panel2;
+        private Panel innerPanel;
+        private RichTextBox richTextBox1;
+        private RichTextBox richTextBox2;
+        private ComboBox cmbLevel;
         private Timer timer;
         private int secondsElapsed;
-        private ComboBox comboBox1;
-        public MinesSweeper()
-        {
+        private int buttonSize = 30;
+
+        public Minesweeper()
+        {          
+            flagCount = numMines;
             PreRequest();
         }
 
@@ -35,7 +37,9 @@ namespace MineSweepers
             InitializeComponent();
             InitializeBoard();
             InitializeTimer();
+            AdjustWindowSize();
         }
+
         private void InitializeBoard()
         {
             gameBoard = new int[numRows, numCols];
@@ -45,8 +49,6 @@ namespace MineSweepers
             CalculateNumbers();
             CreateButtons();
         }
-
-
 
         private void PlaceMines()
         {
@@ -67,14 +69,13 @@ namespace MineSweepers
 
         private void CalculateNumbers()
         {
-
             for (int row = 0; row < numRows; row++)
             {
                 for (int col = 0; col < numCols; col++)
                 {
-
                     if (gameBoard[row, col] == -1)
                         continue;
+
                     int mineCount = 0;
 
                     for (int i = 0; i < 8; i++)
@@ -98,33 +99,37 @@ namespace MineSweepers
             return row >= 0 && row < numRows && col >= 0 && col < numCols;
         }
 
-
         private void CreateButtons()
         {
-            panel2.Controls.Clear();
+            innerPanel.Controls.Clear();
+
+            innerPanel.Size = new Size(numCols * buttonSize, numRows * buttonSize);
 
             for (int row = 0; row < numRows; row++)
             {
                 for (int col = 0; col < numCols; col++)
                 {
-                    buttons[row, col] = new Button();
-
-                    buttons[row, col].Size = new Size(30, 30);
-                    buttons[row, col].Location = new Point(30 * col, 30 * row);
-                    buttons[row, col].Tag = new Point(row, col);
+                    buttons[row, col] = new Button
+                    {
+                        Size = new Size(buttonSize, buttonSize), 
+                        Location = new Point(buttonSize * col, buttonSize * row),
+                        Tag = new Point(row, col),
+                        Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0),
+                        UseVisualStyleBackColor = true,
+                        BackColor = Color.DarkGray,
+                        FlatStyle = FlatStyle.Popup,
+                        ForeColor = Color.Green,                       
+                        Text = ""
+                    };
+                    buttons[row, col].ForeColor = Color.Red;
+                   // buttons[row,col].FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
                     buttons[row, col].MouseUp += new MouseEventHandler(Button_MouseUp);
-                    buttons[row, col].Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    buttons[row, col].UseVisualStyleBackColor = true;
-                   // buttons[row, col].BackColor = Color.FromArgb(64, 64, 64);
-                   // buttons[row, col].ForeColor = Color.Red;
-                    buttons[row, col].BackColor = Color.DarkGray;
-                    buttons[row, col].FlatStyle = FlatStyle.Popup;
-                    buttons[row, col].Text = "";
-                    panel2.Controls.Add(buttons[row, col]);
+                    innerPanel.Controls.Add(buttons[row, col]);
                 }
             }
-        }
 
+            CenterInnerPanel();
+        }
 
         private void Button_MouseUp(object sender, MouseEventArgs e)
         {
@@ -143,13 +148,10 @@ namespace MineSweepers
             }
         }
 
-
         private void RevealCell(int row, int col)
         {
-
             if (!IsInBounds(row, col) || buttons[row, col].Enabled == false)
                 return;
-
 
             if (gameBoard[row, col] == -1)
             {
@@ -163,14 +165,10 @@ namespace MineSweepers
             }
 
             buttons[row, col].Enabled = false;
-
-
             buttons[row, col].Text = gameBoard[row, col].ToString();
-
 
             if (gameBoard[row, col] == 0)
             {
-
                 for (int i = 0; i < 8; i++)
                 {
                     int newRow = row + dRow[i];
@@ -178,7 +176,6 @@ namespace MineSweepers
                     RevealCell(newRow, newCol);
                 }
             }
-
 
             CheckForWin();
         }
@@ -188,14 +185,14 @@ namespace MineSweepers
             if (btn.Text == "F")
             {
                 flagCount++;
-                this.richTextBox1.Text = flagCount.ToString();
+                richTextBox1.Text = flagCount.ToString();
                 btn.Text = "";
                 btn.Image = null;
             }
             else
             {
                 flagCount--;
-                this.richTextBox1.Text = flagCount.ToString();
+                richTextBox1.Text = flagCount.ToString();
                 btn.Text = "F";
                 btn.Image = Properties.Resources.flag;
                 btn.BackgroundImageLayout = ImageLayout.Stretch;
@@ -204,15 +201,12 @@ namespace MineSweepers
             CheckForWin();
         }
 
-
         private void RevealAllMines()
         {
-
             for (int row = 0; row < numRows; row++)
             {
                 for (int col = 0; col < numCols; col++)
                 {
-
                     if (gameBoard[row, col] == -1 && buttons[row, col].Enabled == true)
                     {
                         buttons[row, col].Image = Properties.Resources.BM1;
@@ -222,22 +216,25 @@ namespace MineSweepers
             }
         }
 
-
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            cmbLevel = new ComboBox();
             button2 = new Button();
             button1 = new Button();
             richTextBox2 = new RichTextBox();
             richTextBox1 = new RichTextBox();
             panel2 = new Panel();
+            innerPanel = new Panel();
             panel1.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BackColor = Color.Gray;
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(cmbLevel);
             panel1.Controls.Add(button2);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(richTextBox2);
@@ -247,13 +244,26 @@ namespace MineSweepers
             panel1.Size = new Size(799, 78);
             panel1.TabIndex = 1;
             // 
+            // cmbLevel
+            // 
+            cmbLevel.BackColor = Color.Silver;
+            cmbLevel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cmbLevel.FormattingEnabled = true;
+            cmbLevel.Items.AddRange(new object[] { "----Select----", "Beginner", "Intermediate", "Advanced" });
+            cmbLevel.Location = new Point(154, 21);
+            cmbLevel.Name = "cmbLevel";
+            cmbLevel.Size = new Size(151, 28);
+            cmbLevel.TabIndex = 4;
+            cmbLevel.SelectedIndexChanged += cmbLevel_SelectedIndexChanged;
+            // 
             // button2
             // 
             button2.BackColor = Color.DarkGray;
+            button2.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
             button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            button2.ForeColor = Color.Brown;
-            button2.Location = new Point(178, 17);
+            button2.ForeColor = Color.Red;
+            button2.Location = new Point(481, 17);
             button2.Name = "button2";
             button2.Size = new Size(76, 32);
             button2.TabIndex = 3;
@@ -278,7 +288,7 @@ namespace MineSweepers
             richTextBox2.ForeColor = Color.Red;
             richTextBox2.Location = new Point(630, 10);
             richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(79, 62);
+            richTextBox2.Size = new Size(100, 62);
             richTextBox2.TabIndex = 1;
             richTextBox2.Text = "";
             // 
@@ -299,117 +309,143 @@ namespace MineSweepers
             panel2.AutoSize = true;
             panel2.BackColor = Color.Gray;
             panel2.BorderStyle = BorderStyle.FixedSingle;
+            panel2.Controls.Add(innerPanel);
             panel2.Location = new Point(1, 80);
             panel2.Name = "panel2";
             panel2.Size = new Size(800, 373);
             panel2.TabIndex = 2;
             // 
-            // MinesSweeper
+            // innerPanel
+            // 
+            innerPanel.Location = new Point(253, 39);
+            innerPanel.Name = "innerPanel";
+            innerPanel.Size = new Size(250, 125);
+            innerPanel.TabIndex = 0;
+            // 
+            // Minesweeper
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(800, 450);
             Controls.Add(panel2);
             Controls.Add(panel1);
-            Name = "MinesSweeper";
-            Text = "MinesSweeper";
-            Load += TestMinesSweeper_Load;
+            Icon = Properties.Resources.BM;
+            Name = "Minesweeper";
+            Text = "Minesweeper";
+            Load += Minesweeper_Load;
             panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ResetGame();
+        }
+
+        private void cmbLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cmbLevel.SelectedItem.ToString())
+            {
+                case "Beginner":
+                    numRows = 9;
+                    numCols = 9;
+                    numMines = 10;
+                    break;
+                case "Intermediate":
+                    numRows = 16;
+                    numCols = 16;
+                    numMines = 40;
+                    break;
+                case "Advanced":
+                    numRows = 24;
+                    numCols = 24;
+                    numMines = 99;
+                    break;
+                default:
+                    return;
+            }
+
+            ResetGame();
+        }
+
+        private void Minesweeper_Load(object sender, EventArgs e)
+        {
+            richTextBox1.Text = flagCount.ToString();
+            AdjustWindowSize();
+        }
+
+        private void ResetGame()
+        {
+            flagCount = numMines;
+            richTextBox1.Text = flagCount.ToString();
+            button1.Image = null;
+            button1.Image = Properties.Resources.sm;
+            InitializeBoard();
+            ResetTimer();
+        }
+
+        private void CenterInnerPanel()
+        {
+            innerPanel.Location = new Point(
+                (panel2.Width - innerPanel.Width) / 2,
+                (panel2.Height - innerPanel.Height) / 2
+            );
+
+            innerPanel.Anchor = AnchorStyles.None;
+            
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            CenterInnerPanel();
+        }
+
+        private void CheckForWin()
+        {
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numCols; col++)
+                {
+                    if (gameBoard[row, col] != -1 && buttons[row, col].Enabled)
+                        return;
+                }
+            }
+
+            MessageBox.Show("Congratulations! You've cleared the minefield!");
         }
 
         private void InitializeTimer()
         {
             timer = new Timer();
-            timer.Interval = 1000; // 1 second
+            timer.Interval = 1000;
             timer.Tick += Timer_Tick;
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            secondsElapsed = 0;
             timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             secondsElapsed++;
-            UpdateRichTextBox(secondsElapsed);
+            richTextBox2.Text = secondsElapsed.ToString();
         }
 
-        private void UpdateRichTextBox(int seconds)
+        private void ResetTimer()
         {
-            this.richTextBox2.Text = $"{seconds}";
-        }
-       
-
-        private void TestMinesSweeper_Load(object sender, EventArgs e)
-        {
-            secondsElapsed = 0;
-            timer.Start();
-
-        }
-
-
-        private void ResetGameBoard()
-        {
-
-            gameBoard = new int[numRows, numCols];
-            buttons = new Button[numRows, numCols];
-
-            PlaceMines();
-            CalculateNumbers();
-
-            flagCount = numMines;
-            richTextBox1.Text = flagCount.ToString();
-
-            panel2.Controls.Clear();
-            CreateButtons();
-            button1.Image = null;
-            button1.Image = Properties.Resources.sm;
-            secondsElapsed = 0;
-            richTextBox2.Text = "0";
             timer.Stop();
+            secondsElapsed = 0;
+            richTextBox2.Text = secondsElapsed.ToString();
             timer.Start();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void AdjustWindowSize()
         {
-            ResetGameBoard();
+            int windowWidth = panel2.Width + (this.Width - this.ClientSize.Width);
+            int windowHeight = panel2.Height + panel1.Height + (this.Height - this.ClientSize.Height);
+            this.Size = new Size(windowWidth, windowHeight);
         }
-        private void CheckForWin()
-        {
-            bool hasWon = true;
-            for (int row = 0; row < numRows; row++)
-            {
-                for (int col = 0; col < numCols; col++)
-                {
-                    if (gameBoard[row, col] == -1 && buttons[row, col].Text != "F")
-                    {
-                        hasWon = false;
-                        break;
-                    }
-
-                    else if (gameBoard[row, col] != -1 && buttons[row, col].Enabled)
-                    {
-                        hasWon = false;
-                        break;
-                    }
-                }
-            }
-
-
-            if (hasWon)
-            {
-                MessageBox.Show("Congratulations! You have won the game!");
-                timer.Stop();
-            }
-        }
-
     }
-
-
-
-
 }

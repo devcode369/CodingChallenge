@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\BM.ico" />
     <None Remove="Icons\BM1.jpg" />
+    <None Remove="Icons\BMB.jpg" />
     <None Remove="Icons\BMB2.png" />
     <None Remove="Icons\flag.png" />
     <None Remove="Icons\sm.png" />
@@ -17,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Icons\BM.ico" />
     <EmbeddedResource Include="Icons\BM1.jpg" />
+    <EmbeddedResource Include="Icons\BMB.jpg" />
     <EmbeddedResource Include="Icons\BMB2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
