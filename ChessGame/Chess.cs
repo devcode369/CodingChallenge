@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace ChessGame
@@ -14,6 +16,16 @@ namespace ChessGame
         private Image draggedImage;
         private Point originalLocation;
         private bool isDragging = false;
+        private Point startPoint;
+        private Point endPoint;
+
+        private const string RIGHT = "RIGHT";
+
+        private const string LEFT = "LEFT";
+
+        private const string UP = "UP";
+
+        private const string DOWN = "DOWN";
 
         public Chess()
         {
@@ -47,11 +59,12 @@ namespace ChessGame
                     buttons[row, col].MouseMove += new MouseEventHandler(Button_MouseMove);
                     buttons[row, col].MouseUp += new MouseEventHandler(Button_MouseUp);
 
-                  //  buttons[row, col].Text = $"({row},{col})";
+                    //  buttons[row, col].Text = $"({row},{col})";
                     buttons[row, col].BackgroundImageLayout = ImageLayout.Stretch;
                     if (buttons[row, col] == buttons[0, 0] || buttons[row, col] == buttons[0, 7])
                     {
                         buttons[row, col].Image = ChessGame.Properties.Resources.WElephant;
+
                     }
                     if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
                     {
@@ -77,6 +90,7 @@ namespace ChessGame
                     if (row == 6 && col >= 0 && col <= 7)
                     {
                         buttons[row, col].Image = ChessGame.Properties.Resources.BSepoy;
+                        buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WPAWN));
                     }
 
                     if (buttons[row, col] == buttons[7, 0] || buttons[row, col] == buttons[7, 7])
@@ -192,9 +206,15 @@ namespace ChessGame
                 Point clientPoint = panel2.PointToClient(new Point(e.X, e.Y));
                 Button targetButton = GetButtonFromPoint(clientPoint);
 
-                if (targetButton != null && targetButton.Image == null && targetButton != draggedButton)
+                if (targetButton != null && targetButton.Image == null && targetButton != draggedButton && ValidateMove(targetButton))
                 {
+                    //var isVaid = ValidateMove(targetButton);
+                    //if (!isVaid)
+                    //{
+
+                    //}
                     targetButton.Image = draggedImage; // Set the image to the target button
+                    targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point,string>)draggedButton.Tag).Item2);
                 }
                 else
                 {
@@ -236,6 +256,7 @@ namespace ChessGame
                     button.Image = null; // Clear the image from the original button
                     panel2.DoDragDrop(button, DragDropEffects.Move); // Start drag-and-drop operation
                 }
+                startPoint = e.Location;
             }
         }
 
@@ -251,8 +272,116 @@ namespace ChessGame
         {
             if (e.Button == MouseButtons.Left && isDragging)
             {
+                endPoint = e.Location;
                 // Perform the drop operation in Panel2_DragDrop
             }
         }
+
+
+        private bool ValidateMove(Button destPlace)
+        {
+            bool isValid = false;
+            if (draggedImage != null)
+            {
+                var val = GetTagValues(draggedButton);
+
+
+
+                if (val.Item2.Contains(nameof(ChessPiece.WPAWN)))
+                {
+
+                    if (UP == GetDirection())
+                    {
+                        int x = val.Item1.X;
+
+                        var destCoordinates = (Point)destPlace.Tag;
+                        int x1 = destCoordinates.X;
+                        if (Math.Abs(x) - Math.Abs(x1) == 1)
+                        {
+                            return !isValid;
+                        }
+                        else
+                        {
+                            return isValid;
+                        }
+                    }
+                    else
+                    {
+                        return isValid;
+                    }
+
+                }
+            }
+            return isValid;
+
+        }
+
+
+        private Tuple<Point, string?> GetTagValues(Button button)
+        {
+
+            return (Tuple<Point, string?>)button.Tag;
+
+        }
+        public string GetDirection()
+        {
+            int deltaX = endPoint.X - startPoint.X;
+            int deltaY = endPoint.Y - startPoint.Y;
+
+            if (Math.Abs(deltaX) > Math.Abs(deltaY))
+            {
+
+                if (deltaX > 0)
+                {
+                    return RIGHT;
+                }
+                else
+                {
+                    //Left
+                    return LEFT;
+                }
+            }
+            else
+            {
+                if (deltaX > 0)
+                {
+                    //Down
+                    return DOWN;
+                }
+                else
+                {
+                    //up
+                    return UP;
+                }
+            }
+        }
+    }
+
+
+
+    public enum ChessPiece
+    {
+        NONE,
+        WKING,
+        WQUEEN,
+        WELEPHANT,
+        WHORSE,
+        WBISHOP,
+        WPAWN,
+        BKING,
+        BQUEEN,
+        BELEPHANT,
+        BHORSE,
+        BBISHOP,
+        BPAWN
+    }
+
+    public enum Direction
+    {
+        NONE,
+        UP,
+        DOWN,
+        RIGHT,
+        LEFT
     }
 }
