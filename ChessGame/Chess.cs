@@ -69,22 +69,27 @@ namespace ChessGame
                         if (buttons[row, col] == buttons[0, 0] || buttons[row, col] == buttons[0, 7])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.WElephant;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WHITEELEPHANT));
                         }
                         if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.WHorse;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WHITEHORSE));
                         }
                         if (buttons[row, col] == buttons[0, 2] || buttons[row, col] == buttons[0, 5])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.WMand;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WHITEBISHOP));
                         }
                         if (buttons[row, col] == buttons[0, 3])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.WQueen;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WHITEQUEEN));
                         }
                         if (buttons[row, col] == buttons[0, 4])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.Wking;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WHITEKING));
                         }
 
                         if (row == 1 && col >= 0 && col <= 7)
@@ -101,22 +106,27 @@ namespace ChessGame
                         if (buttons[row, col] == buttons[7, 0] || buttons[row, col] == buttons[7, 7])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.BElephant;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.BLACKELEPHANT));
                         }
                         if (buttons[row, col] == buttons[7, 1] || buttons[row, col] == buttons[7, 6])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.BHorse;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.BLACKHORSE));
                         }
                         if (buttons[row, col] == buttons[7, 2] || buttons[row, col] == buttons[7, 5])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.BMand;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.BLACKBISHOP));
                         }
                         if (buttons[row, col] == buttons[7, 3])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.BQueen;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.BLACKQUEEN));
                         }
                         if (buttons[row, col] == buttons[7, 4])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.BKing;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.BLACKKING));
                         }
 
                         // Alternate colors
@@ -250,16 +260,19 @@ namespace ChessGame
                     {
                         targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point, string>)draggedButton.Tag).Item2);
                     }
-                    if (targetButton != null && targetButton.Image == null && targetButton != draggedButton && ValidateMove(targetButton))
+                    if (targetButton != null  && targetButton != draggedButton && ValidateMove(targetButton))
                     {
-                        targetButton.Image = draggedImage; // Set the image to the target button
+                        targetButton.Image = draggedImage; 
                         if(targetButton.Tag is  Tuple<Point, string>)
                         {
-                            targetButton.Tag = draggedButton.Tag;
+                           var vlas= (Tuple<Point,string>)targetButton.Tag;
+
+                            targetButton.Tag = new Tuple<Point, string>(vlas.Item1, ((Tuple<Point, string>)draggedButton.Tag).Item2);                            
+                          
                         }
                         else
                         {
-                            targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point, string>)draggedButton.Tag).Item2);
+                            targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point, string>)draggedButton.Tag).Item2);                          
                         }
                 
                     }
@@ -357,54 +370,6 @@ namespace ChessGame
             }
         }
 
-        //private bool ValidateMove(Button destPlace)
-        //{
-        //    try
-        //    {
-        //        bool isValid = false;
-
-        //        if (draggedImage != null)
-        //        {
-        //            var val = GetTagValues(draggedButton);
-
-        //            if (val.Item2.Contains(nameof(ChessPiece.WPAWN)))
-        //            {
-        //                if (UP == GetDirection())
-        //                {
-        //                    int startX = val.Item1.X;
-        //                    var destCoordinates = (Point)destPlace.Tag;
-        //                    int endX = destCoordinates.X;
-
-        //                    if (endX - startX == -1 || (startX == 6 && endX - startX == -2)) // Pawns can move one step forward or two steps from the initial position
-        //                    {
-        //                        isValid = true;
-        //                    }
-        //                }
-        //            }
-        //            else if (val.Item2.Contains(nameof(ChessPiece.BPAWN)))
-        //            {
-        //                if (DOWN == GetDirection())
-        //                {
-        //                    int startX = val.Item1.X;
-        //                    var destCoordinates = (Point)destPlace.Tag;
-        //                    int endX = destCoordinates.X;
-
-        //                    if (endX - startX == 1 || (startX == 1 && endX - startX == 2)) // Pawns can move one step forward or two steps from the initial position
-        //                    {
-        //                        isValid = true;
-        //                    }
-        //                }
-        //            }
-        //        }
-
-        //        return isValid;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Error in ValidateMove method: {ex.ToString()}");
-        //        return false;
-        //    }
-        //}
         private bool ValidateMove(Button destPlace)
         {
             try
