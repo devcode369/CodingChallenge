@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using System.Net;
-using System.Runtime.CompilerServices;
+using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms;
 
 namespace ChessGame
@@ -20,360 +19,513 @@ namespace ChessGame
         private Point endPoint;
 
         private const string RIGHT = "RIGHT";
-
         private const string LEFT = "LEFT";
-
         private const string UP = "UP";
-
         private const string DOWN = "DOWN";
 
         public Chess()
         {
-            InitializeComponent();
-            CreateButtons();
-            this.Resize += new EventHandler(OnFormResize);
-            CenterPanel();
+            try
+            {
+                InitializeComponent();
+                CreateButtons();
+                this.Resize += new EventHandler(OnFormResize);
+                CenterPanel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Chess constructor: {ex.ToString()}");
+            }
         }
 
         private void CreateButtons()
         {
-            panel2.Controls.Clear();
-            buttons = new Button[8, 8];
-            panel2.Size = new Size(8 * buttonSize, 8 * buttonSize);
-            panel2.AllowDrop = true; // Enable dropping on panel2
-            var color1 = Color.Wheat;
-            var color2 = Color.SaddleBrown;
-
-            for (int row = 0; row < 8; row++)
+            try
             {
-                for (int col = 0; col < 8; col++)
+                panel2.Controls.Clear();
+                buttons = new Button[8, 8];
+                panel2.Size = new Size(8 * buttonSize, 8 * buttonSize);
+                panel2.AllowDrop = true; // Enable dropping on panel2
+                var color1 = Color.Wheat;
+                var color2 = Color.SaddleBrown;
+
+                for (int row = 0; row < 8; row++)
                 {
-                    buttons[row, col] = new Button();
-                    buttons[row, col].Size = new Size(buttonSize, buttonSize);
-                    buttons[row, col].Location = new Point(buttonSize * col, buttonSize * row);
-                    buttons[row, col].Tag = new Point(row, col);
-                    buttons[row, col].UseVisualStyleBackColor = true;
-                    buttons[row, col].FlatStyle = FlatStyle.Popup;
+                    for (int col = 0; col < 8; col++)
+                    {
+                        buttons[row, col] = new Button();
+                        buttons[row, col].Size = new Size(buttonSize, buttonSize);
+                        buttons[row, col].Location = new Point(buttonSize * col, buttonSize * row);
+                         buttons[row, col].Tag = new Point(row, col);
+                       // buttons[row, col].Tag = new PieceDetails();
+                        buttons[row, col].UseVisualStyleBackColor = true;
+                        buttons[row, col].FlatStyle = FlatStyle.Popup;
 
-                    buttons[row, col].MouseDown += new MouseEventHandler(Button_MouseDown);
-                    buttons[row, col].MouseMove += new MouseEventHandler(Button_MouseMove);
-                    buttons[row, col].MouseUp += new MouseEventHandler(Button_MouseUp);
+                        buttons[row, col].MouseDown += new MouseEventHandler(Button_MouseDown);
+                        buttons[row, col].MouseMove += new MouseEventHandler(Button_MouseMove);
+                        buttons[row, col].MouseUp += new MouseEventHandler(Button_MouseUp);
 
-                    //  buttons[row, col].Text = $"({row},{col})";
-                    buttons[row, col].BackgroundImageLayout = ImageLayout.Stretch;
-                    if (buttons[row, col] == buttons[0, 0] || buttons[row, col] == buttons[0, 7])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.WElephant;
+                        buttons[row, col].BackgroundImageLayout = ImageLayout.Stretch;
+                        if (buttons[row, col] == buttons[0, 0] || buttons[row, col] == buttons[0, 7])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WElephant;
+                        }
+                        if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHorse;
+                        }
+                        if (buttons[row, col] == buttons[0, 2] || buttons[row, col] == buttons[0, 5])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WMand;
+                        }
+                        if (buttons[row, col] == buttons[0, 3])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WQueen;
+                        }
+                        if (buttons[row, col] == buttons[0, 4])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.Wking;
+                        }
 
-                    }
-                    if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.WHorse;
-                    }
-                    if (buttons[row, col] == buttons[0, 2] || buttons[row, col] == buttons[0, 5])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.WMand;
-                    }
-                    if (buttons[row, col] == buttons[0, 3])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.WQueen;
-                    }
-                    if (buttons[row, col] == buttons[0, 4])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.Wking;
-                    }
+                        if (row == 1 && col >= 0 && col <= 7)
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WSepoy;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WHITEPAWN));
+                        }
+                        if (row == 6 && col >= 0 && col <= 7)
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BSepoy;
+                            buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.BLACKPAWN));
+                        }
 
-                    if (row == 1 && col >= 0 && col <= 7)
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.WSepoy;
-                    }
-                    if (row == 6 && col >= 0 && col <= 7)
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.BSepoy;
-                        buttons[row, col].Tag = new Tuple<Point, string>((Point)(buttons[row, col].Tag), Convert.ToString(row + col) + nameof(ChessPiece.WPAWN));
-                    }
+                        if (buttons[row, col] == buttons[7, 0] || buttons[row, col] == buttons[7, 7])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BElephant;
+                        }
+                        if (buttons[row, col] == buttons[7, 1] || buttons[row, col] == buttons[7, 6])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BHorse;
+                        }
+                        if (buttons[row, col] == buttons[7, 2] || buttons[row, col] == buttons[7, 5])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BMand;
+                        }
+                        if (buttons[row, col] == buttons[7, 3])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BQueen;
+                        }
+                        if (buttons[row, col] == buttons[7, 4])
+                        {
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BKing;
+                        }
 
-                    if (buttons[row, col] == buttons[7, 0] || buttons[row, col] == buttons[7, 7])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.BElephant;
-                    }
-                    if (buttons[row, col] == buttons[7, 1] || buttons[row, col] == buttons[7, 6])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.BHorse;
-                    }
-                    if (buttons[row, col] == buttons[7, 2] || buttons[row, col] == buttons[7, 5])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.BMand;
-                    }
-                    if (buttons[row, col] == buttons[7, 3])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.BQueen;
-                    }
-                    if (buttons[row, col] == buttons[7, 4])
-                    {
-                        buttons[row, col].Image = ChessGame.Properties.Resources.BKing;
-                    }
+                        // Alternate colors
+                        if ((row + col) % 2 == 0)
+                        {
+                            buttons[row, col].BackColor = color1;
+                        }
+                        else
+                        {
+                            buttons[row, col].BackColor = color2;
+                        }
 
-                    // Alternate colors
-                    if ((row + col) % 2 == 0)
-                    {
-                        buttons[row, col].BackColor = color1;
+                        panel2.Controls.Add(buttons[row, col]);
                     }
-                    else
-                    {
-                        buttons[row, col].BackColor = color2;
-                    }
-
-                    panel2.Controls.Add(buttons[row, col]);
                 }
-            }
 
-            // Event handlers for panel2 to handle drag-and-drop operations
-            panel2.DragEnter += Panel2_DragEnter;
-            panel2.DragDrop += Panel2_DragDrop;
+                // Event handlers for panel2 to handle drag-and-drop operations
+                panel2.DragEnter += Panel2_DragEnter;
+                panel2.DragDrop += Panel2_DragDrop;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in CreateButtons method: {ex.ToString()}");
+            }
         }
 
         private void OnFormResize(object sender, EventArgs e)
         {
-            CenterPanel();
+            try
+            {
+                CenterPanel();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in OnFormResize method: {ex.ToString()}");
+            }
         }
 
         private void CenterPanel()
         {
-            int x = (this.ClientSize.Width - panel2.Width) / 2;
-            int y = (this.ClientSize.Height - panel2.Height) / 2;
-            panel2.Location = new Point(x, y);
+            try
+            {
+                int x = (this.ClientSize.Width - panel2.Width) / 2;
+                int y = (this.ClientSize.Height - panel2.Height) / 2;
+                panel2.Location = new Point(x, y);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in CenterPanel method: {ex.ToString()}");
+            }
         }
 
         private void InitializeComponent()
         {
-            panel1 = new Panel();
-            panel2 = new Panel();
-            this.button1 = new Button();
-            panel1.SuspendLayout();
-            SuspendLayout();
-            // 
-            // panel1
-            // 
-            panel1.AutoSize = true;
-            panel1.Controls.Add(this.button1);
-            panel1.Location = new Point(1, 1);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(982, 94);
-            panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            panel2.AutoSize = true;
-            panel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panel2.Location = new Point(0, 98);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(0, 0);
-            panel2.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new Point(433, 33);
-            this.button1.Name = "button1";
-            this.button1.Size = new Size(94, 29);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // Chess
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(982, 953);
-            Controls.Add(panel2);
-            Controls.Add(panel1);
-            Name = "Chess";
-            Text = "Chess";
-            panel1.ResumeLayout(false);
-            ResumeLayout(false);
-            PerformLayout();
+            try
+            {
+                panel1 = new Panel();
+                panel2 = new Panel();
+                this.button1 = new Button();
+                panel1.SuspendLayout();
+                SuspendLayout();
+                // 
+                // panel1
+                // 
+                panel1.AutoSize = true;
+                panel1.Controls.Add(this.button1);
+                panel1.Location = new Point(1, 1);
+                panel1.Name = "panel1";
+                panel1.Size = new Size(982, 94);
+                panel1.TabIndex = 0;
+                // 
+                // panel2
+                // 
+                panel2.AutoSize = true;
+                panel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                panel2.Location = new Point(0, 98);
+                panel2.Name = "panel2";
+                panel2.Size = new Size(0, 0);
+                panel2.TabIndex = 1;
+                // 
+                // button1
+                // 
+                this.button1.Location = new Point(433, 33);
+                this.button1.Name = "button1";
+                this.button1.Size = new Size(94, 29);
+                this.button1.TabIndex = 0;
+                this.button1.Text = "button1";
+                this.button1.UseVisualStyleBackColor = true;
+                // 
+                // Chess
+                // 
+                AutoScaleDimensions = new SizeF(8F, 20F);
+                AutoScaleMode = AutoScaleMode.Font;
+                ClientSize = new Size(982, 953);
+                Controls.Add(panel2);
+                Controls.Add(panel1);
+                Name = "Chess";
+                Text = "Chess";
+                panel1.ResumeLayout(false);
+                ResumeLayout(false);
+                PerformLayout();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in InitializeComponent method: {ex.ToString()}");
+            }
         }
 
         private void Panel2_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Move; // Set the drag effect to Move
+            try
+            {
+                e.Effect = DragDropEffects.Move; // Set the drag effect to Move
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Panel2_DragEnter method: {ex.ToString()}");
+            }
         }
 
         private void Panel2_DragDrop(object sender, DragEventArgs e)
         {
-            if (isDragging)
+            try
             {
-                Point clientPoint = panel2.PointToClient(new Point(e.X, e.Y));
-                Button targetButton = GetButtonFromPoint(clientPoint);
-
-                if (targetButton != null && targetButton.Image == null && targetButton != draggedButton && ValidateMove(targetButton))
+                if (isDragging)
                 {
-                    //var isVaid = ValidateMove(targetButton);
-                    //if (!isVaid)
-                    //{
+                    Point clientPoint = panel2.PointToClient(new Point(e.X, e.Y));
+                    Button targetButton = GetButtonFromPoint(clientPoint);
+                    
+                    if(targetButton.Tag is not Tuple<Point,string>)
+                    {
+                        targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point, string>)draggedButton.Tag).Item2);
+                    }
+                    if (targetButton != null && targetButton.Image == null && targetButton != draggedButton && ValidateMove(targetButton))
+                    {
+                        targetButton.Image = draggedImage; // Set the image to the target button
+                        if(targetButton.Tag is  Tuple<Point, string>)
+                        {
+                            targetButton.Tag = draggedButton.Tag;
+                        }
+                        else
+                        {
+                            targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point, string>)draggedButton.Tag).Item2);
+                        }
+                
+                    }
+                    else
+                    {
+                        // Restore the image to the original button if the drop is not valid
+                        draggedButton.Image = draggedImage;
+                    }
 
-                    //}
-                    targetButton.Image = draggedImage; // Set the image to the target button
-                    targetButton.Tag = new Tuple<Point, string>((Point)targetButton.Tag, ((Tuple<Point,string>)draggedButton.Tag).Item2);
+                    // Reset the dragging state
+                    isDragging = false;
+                    draggedButton = null;
+                    draggedImage = null;
+                    Cursor.Current = Cursors.Default; // Reset cursor
                 }
-                else
-                {
-                    // Restore the image to the original button if the drop is not valid
-                    draggedButton.Image = draggedImage;
-                }
-
-                // Reset the dragging state
-                isDragging = false;
-                draggedButton = null;
-                draggedImage = null;
-                Cursor.Current = Cursors.Default; // Reset cursor
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Panel2_DragDrop method: {ex.ToString()}");
             }
         }
 
         private Button GetButtonFromPoint(Point clientPoint)
         {
-            foreach (Button btn in panel2.Controls)
+            try
             {
-                if (btn.Bounds.Contains(clientPoint))
+                foreach (Button btn in panel2.Controls)
                 {
-                    return btn;
+                    if (btn.Bounds.Contains(clientPoint))
+                    {
+                        return btn;
+                    }
                 }
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in GetButtonFromPoint method: {ex.ToString()}");
+                return null;
+            }
         }
 
         private void Button_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            try
             {
-                Button button = sender as Button;
-                if (button != null && button.Image != null)
+                if (e.Button == MouseButtons.Left)
                 {
-                    draggedButton = button;
-                    draggedImage = button.Image;
-                    originalLocation = button.Location;
-                    isDragging = true;
-                    button.Image = null; // Clear the image from the original button
-                    panel2.DoDragDrop(button, DragDropEffects.Move); // Start drag-and-drop operation
+                    Button button = sender as Button;
+                    if (button != null && button.Image != null)
+                    {
+                        draggedButton = button;
+                        draggedImage = button.Image;
+                        originalLocation = button.Location;
+                        isDragging = true;
+                        button.Image = null; // Clear the image from the original button
+                        panel2.DoDragDrop(button, DragDropEffects.Move); // Start drag-and-drop operation
+                    }
+                    startPoint = e.Location;
                 }
-                startPoint = e.Location;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Button_MouseDown method: {ex.ToString()}");
             }
         }
 
         private void Button_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDragging)
+            try
             {
-                Cursor.Current = Cursors.Hand; // Change cursor to indicate dragging
+                if (isDragging)
+                {
+                    Cursor.Current = Cursors.Hand; // Change cursor to indicate dragging
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Button_MouseMove method: {ex.ToString()}");
             }
         }
 
         private void Button_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && isDragging)
+            try
             {
-                endPoint = e.Location;
-                // Perform the drop operation in Panel2_DragDrop
-            }
-        }
-
-
-        private bool ValidateMove(Button destPlace)
-        {
-            bool isValid = false;
-            if (draggedImage != null)
-            {
-                var val = GetTagValues(draggedButton);
-
-
-
-                if (val.Item2.Contains(nameof(ChessPiece.WPAWN)))
+                if (e.Button == MouseButtons.Left && isDragging)
                 {
-
-                    if (UP == GetDirection())
-                    {
-                        int x = val.Item1.X;
-
-                        var destCoordinates = (Point)destPlace.Tag;
-                        int x1 = destCoordinates.X;
-                        if (Math.Abs(x) - Math.Abs(x1) == 1)
-                        {
-                            return !isValid;
-                        }
-                        else
-                        {
-                            return isValid;
-                        }
-                    }
-                    else
-                    {
-                        return isValid;
-                    }
-
+                    endPoint = e.Location;
                 }
             }
-            return isValid;
-
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Button_MouseUp method: {ex.ToString()}");
+            }
         }
 
+        //private bool ValidateMove(Button destPlace)
+        //{
+        //    try
+        //    {
+        //        bool isValid = false;
+
+        //        if (draggedImage != null)
+        //        {
+        //            var val = GetTagValues(draggedButton);
+
+        //            if (val.Item2.Contains(nameof(ChessPiece.WPAWN)))
+        //            {
+        //                if (UP == GetDirection())
+        //                {
+        //                    int startX = val.Item1.X;
+        //                    var destCoordinates = (Point)destPlace.Tag;
+        //                    int endX = destCoordinates.X;
+
+        //                    if (endX - startX == -1 || (startX == 6 && endX - startX == -2)) // Pawns can move one step forward or two steps from the initial position
+        //                    {
+        //                        isValid = true;
+        //                    }
+        //                }
+        //            }
+        //            else if (val.Item2.Contains(nameof(ChessPiece.BPAWN)))
+        //            {
+        //                if (DOWN == GetDirection())
+        //                {
+        //                    int startX = val.Item1.X;
+        //                    var destCoordinates = (Point)destPlace.Tag;
+        //                    int endX = destCoordinates.X;
+
+        //                    if (endX - startX == 1 || (startX == 1 && endX - startX == 2)) // Pawns can move one step forward or two steps from the initial position
+        //                    {
+        //                        isValid = true;
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        return isValid;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Error in ValidateMove method: {ex.ToString()}");
+        //        return false;
+        //    }
+        //}
+        private bool ValidateMove(Button destPlace)
+        {
+            try
+            {
+                bool isValid = false;
+
+                if (draggedImage != null)
+                {
+                    var val = GetTagValues(draggedButton);
+                    var  dragVal=GetTagValues(destPlace);
+                    int stX = val.Item1.X;
+                    int stY = val.Item1.Y;
+                    var destC = dragVal.Item1;
+                    int eX = destC.X;
+                    int eY = destC.Y;
+
+                    if (val.Item2.Contains(nameof(ChessPiece.WHITEPAWN)))
+                    {
+                        if (((eX > stX && Math.Abs(eX-stX) == 1) && stY == eY && destPlace.Image == null) ||
+                             (stX == 1 && Math.Abs(eX - stX)== 2 && stY == eY && destPlace.Image == null) ||
+                             ((eX > stX && Math.Abs(eX - stX) == 1) && Math.Abs(stY - eY) == 1) && destPlace.Image != null && dragVal.Item2.Contains("BLACK"))
+                        {
+                            isValid = true;
+
+                        }                 
+
+                        
+                    }
+                    else if (val.Item2.Contains(nameof(ChessPiece.BLACKPAWN)))
+                    {
+                        
+
+
+                        if (((stX > eX && Math.Abs(stX - eX) == 1) && stY == eY  && destPlace.Image ==null) ||
+                              (stX == 6 && eX - stX == -2 && stY == eY && destPlace.Image == null) ||
+                              ((stX > eX && Math.Abs(stX - eX) == 1) && Math.Abs(stY - eY) == 1) && destPlace.Image !=null && dragVal.Item2.Contains("WHITE"))
+                        {
+                            isValid = true;
+
+                        }
+
+                    }
+                }
+
+                return isValid;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in ValidateMove method: {ex.ToString()}");
+                return false;
+            }
+        }
 
         private Tuple<Point, string?> GetTagValues(Button button)
         {
-
-            return (Tuple<Point, string?>)button.Tag;
-
+            try
+            {
+                return (Tuple<Point, string?>)button.Tag;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in GetTagValues method: {ex.ToString()}");
+                return null;
+            }
         }
+
+
+        
         public string GetDirection()
         {
-            int deltaX = endPoint.X - startPoint.X;
-            int deltaY = endPoint.Y - startPoint.Y;
-
-            if (Math.Abs(deltaX) > Math.Abs(deltaY))
+            try
             {
+                int deltaX = endPoint.X - startPoint.X;
+                int deltaY = endPoint.Y - startPoint.Y;
 
-                if (deltaX > 0)
+                if (Math.Abs(deltaX) > Math.Abs(deltaY))
                 {
-                    return RIGHT;
+                    if (deltaX > 0)
+                    {
+                        return RIGHT;
+                    }
+                    else
+                    {
+                        return LEFT;
+                    }
                 }
                 else
                 {
-                    //Left
-                    return LEFT;
+                    if (deltaY > 0)
+                    {
+                        return DOWN;
+                    }
+                    else
+                    {
+                        return UP;
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (deltaX > 0)
-                {
-                    //Down
-                    return DOWN;
-                }
-                else
-                {
-                    //up
-                    return UP;
-                }
+                MessageBox.Show($"Error in GetDirection method: {ex.ToString()}");
+                return null;
             }
         }
     }
 
-
-
     public enum ChessPiece
     {
         NONE,
-        WKING,
-        WQUEEN,
-        WELEPHANT,
-        WHORSE,
-        WBISHOP,
-        WPAWN,
-        BKING,
-        BQUEEN,
-        BELEPHANT,
-        BHORSE,
-        BBISHOP,
-        BPAWN
+        WHITEKING,
+        WHITEQUEEN,
+        WHITEELEPHANT,
+        WHITEHORSE,
+        WHITEBISHOP,
+        WHITEPAWN,
+        BLACKKING,
+        BLACKQUEEN,
+        BLACKELEPHANT,
+        BLACKHORSE,
+        BLACKBISHOP,
+        BLACKPAWN
     }
 
     public enum Direction
@@ -383,5 +535,28 @@ namespace ChessGame
         DOWN,
         RIGHT,
         LEFT
+    }
+
+
+
+    public class Board
+    {
+        public string? Direction { get; set; }
+    }
+
+    public class PieceDetails
+    {
+        public PieceDetails()
+        {
+            LinkedPoint = new LinkedList<string>();
+           
+        }
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Color { get; set; }
+        public Point? CurrentPoint { get; set; }
+        public Image? Img { get; set; }
+        public LinkedList<string> LinkedPoint { get; set; }
+
     }
 }
