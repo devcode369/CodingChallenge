@@ -135,7 +135,7 @@ namespace ChessGame
                         {
                             buttons[row, col].BackColor = color2;
                         }
-                        buttons[row, col].Tag = new Point(row, col);
+                        //  buttons[row, col].Tag = new Point(row, col);
                         panel2.Controls.Add(buttons[row, col]);
                     }
                 }
@@ -394,7 +394,7 @@ namespace ChessGame
 
                     stX = draggedDetails.CurrentPoint.Value.X;
                     stY = draggedDetails.CurrentPoint.Value.Y;
-
+                    var colors = FindColor(draggedDetails.Name);
 
                     if (draggedDetails.Name.Equals(nameof(ChessPiece.WHITEPAWN)))
                     {
@@ -420,9 +420,9 @@ namespace ChessGame
                     }
 
 
-                    if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKELEPHANT)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEELEPHANT)))
+                    else if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKELEPHANT)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEELEPHANT)))
                     {
-                        string color = FindColor(draggedDetails.Name);
+
 
                         if (CheckStraightPos(stX, stY, eX, eY) == false)
                         {
@@ -431,7 +431,7 @@ namespace ChessGame
 
                         if (
                            (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
-                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(color) && (stX == eX || stY == eY))
+                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) && (stX == eX || stY == eY))
                               || (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null && (stX == eX || stY == eY))
                             )
                         {
@@ -444,35 +444,34 @@ namespace ChessGame
 
                     }
 
-                    if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKQUEEN)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEQUEEN)))
+                    else if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKQUEEN)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEQUEEN)))
                     {
-                        string color = FindColor(draggedDetails.Name);
+
 
                         var diagPoints = GetDiagonalPoints((stX, stY), (eX, eY));
 
                         if (diagPoints?.Any() == true)
                         {
-                            for (int i = 1; i <= diagPoints.Count; i++)
+                            for (int i = 1; i <= diagPoints.Count-1; i++)
                             {
                                 if ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image != null &&
 
-                                    ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(color)
+                                    ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.primaryColor)
                                     && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
 
-                                    ) || (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null)
+                                   && !((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.secondaryColor))
+                                   || ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null)
+                                   && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY]))
 
 
                                     )
                                 {
                                     return true;
-                                }
-                                else
-                                {
-                                    return false;
-                                }
+                                }                            
 
 
                             }
+                            return false;
                         }
 
 
@@ -484,7 +483,7 @@ namespace ChessGame
 
                         if (
                            (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
-                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(color) && (stX == eX || stY == eY))
+                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) && (stX == eX || stY == eY))
                               || (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null && (stX == eX || stY == eY))
                             )
                         {
@@ -497,41 +496,37 @@ namespace ChessGame
 
                     }
 
-                    if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKBISHOP)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEBISHOP)))
+                    else if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKBISHOP)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEBISHOP)))
                     {
                         var diagPoints = GetDiagonalPoints((stX, stY), (eX, eY));
 
-                        string color = FindColor(draggedDetails.Name);
-
                         if (diagPoints?.Any() == true)
                         {
-                            for (int i = 1; i <= diagPoints.Count; i++)
+                            for (int i = 1; i <= diagPoints.Count - 1; i++)
                             {
                                 if ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image != null &&
 
-                                    ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(color)
+                                    ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.primaryColor)
                                     && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
 
-                                    ) || (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null)
+                                   && !((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.secondaryColor))
+                                   || ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null)
+                                   && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY]))
 
 
                                     )
                                 {
                                     return true;
                                 }
-                                else
-                                {
-                                    return false;
-                                }
 
 
                             }
+                            return false;
                         }
 
                     }
-                    if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKHORSE)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEHORSE)))
+                    else if (draggedDetails.Name.Equals(nameof(ChessPiece.BLACKHORSE)) || draggedDetails.Name.Equals(nameof(ChessPiece.WHITEHORSE)))
                     {
-                        string color = draggedDetails.Name.Equals(nameof(ChessPiece.BLACKHORSE)) ? "WHITE" : "BLACK";
 
                         int[,] moveOffsets = new int[,]
                              {
@@ -549,7 +544,7 @@ namespace ChessGame
                             {
 
                                 if ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
-                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(color) ||
+                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) ||
                             buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null))
                                 {
                                     return true;
@@ -564,26 +559,27 @@ namespace ChessGame
 
                     }
 
-                    if (draggedDetails.Name.Equals(nameof(ChessPiece.WHITEKING)) || draggedDetails.Name.Equals(nameof(ChessPiece.BLACKKING)))
+                    else if (draggedDetails.Name.Equals(nameof(ChessPiece.WHITEKING)) || draggedDetails.Name.Equals(nameof(ChessPiece.BLACKKING)))
                     {
-                        var color = FindColor(draggedDetails.Name);
+
                         int[,] kingMoves = new int[,]
                             {
                               { -1, -1 }, { -1, 0 }, { -1, 1 },
                               { 0, -1 }, { 0, 1 },
                               { 1, -1 }, { 1, 0 }, { 1, 1 }
                             };
-                        (int,int)? king2L = FindKing(color);
+                        (int, int)? king2L = FindKing(colors.primaryColor);
                         var kingRow = king2L.Value.Item1;
-                        var kingCol=king2L.Value.Item2;
-                        bool isValids = KingValidMove(eX, eY, kingRow,kingCol, kingMoves) &&
+                        var kingCol = king2L.Value.Item2;
+                        bool isValids = KingValidMove(eX, eY, kingRow, kingCol, kingMoves) &&
                                       !IsKingCLose(eX, eY, kingRow, kingCol, kingMoves);
 
 
-                        if (isValids) {
+                        if (isValids)
+                        {
 
                             if ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
-                              ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(color) ||
+                              ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) ||
                               buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null))
                             {
                                 return true;
@@ -592,7 +588,7 @@ namespace ChessGame
                         else
                         {
                             return false;
-                        }                    
+                        }
 
                         return false;
 
@@ -623,7 +619,7 @@ namespace ChessGame
             return false;
         }
 
-        public  bool IsKingCLose(int king1Row, int king1Col, int king2Row, int king2Col, int[,] kingMoves)
+        public bool IsKingCLose(int king1Row, int king1Col, int king2Row, int king2Col, int[,] kingMoves)
         {
             for (int i = 0; i < kingMoves.GetLength(0); i++)
             {
@@ -640,7 +636,7 @@ namespace ChessGame
         }
         private bool CheckStraightPos(int stX, int stY, int eX, int eY)
         {
-            bool isValid = false;
+            bool isValid = true;
             int max = 0;
             int min = 0;
             int cons = 0;
@@ -679,25 +675,25 @@ namespace ChessGame
             return isValid;
         }
 
-        private string FindColor(string piece)
+        private (string primaryColor, string secondaryColor) FindColor(string piece)
         {
-            var color = piece.Contains("WHITE") ? "BLACK" : "WHITE";
-            return color;
+            return piece.Contains("WHITE") ? ("BLACK", "WHITE") : ("WHITE", "BLACK");
+
         }
 
 
-        private (int,int)? FindKing(string color)
+        private (int, int)? FindKing(string color)
         {
-            
-          foreach(var button in buttons)
+
+            foreach (var button in buttons)
             {
-                if(button?.Image?.Tag is PieceDetails)
+                if (button?.Image?.Tag is PieceDetails)
                 {
 
                     var piDetails = ((PieceDetails)button.Image.Tag);
-                    if(piDetails.Color==color && piDetails.Name.Contains("KING"))
+                    if (piDetails.Color == color && piDetails.Name.Contains("KING"))
                     {
-                        return new(piDetails.CurrentPoint.Value.X,piDetails.CurrentPoint.Value.Y);
+                        return new(piDetails.CurrentPoint.Value.X, piDetails.CurrentPoint.Value.Y);
                     }
                 }
 
