@@ -571,7 +571,7 @@ namespace ChessGame
                         (int, int)? king2L = FindKing(colors.primaryColor);
                         var kingRow = king2L.Value.Item1;
                         var kingCol = king2L.Value.Item2;
-                        bool isValids = KingValidMove(eX, eY, kingRow, kingCol, kingMoves) &&
+                        bool isValids = KingValidMove(stX,stY,eX, eY, kingMoves) &&
                                       !IsKingCLose(eX, eY, kingRow, kingCol, kingMoves);
 
 
