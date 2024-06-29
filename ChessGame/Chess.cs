@@ -1,4 +1,5 @@
-﻿using static System.Windows.Forms.AxHost;
+﻿using System.Reflection.PortableExecutable;
+using static System.Windows.Forms.AxHost;
 
 namespace ChessGame
 {
@@ -563,7 +564,39 @@ namespace ChessGame
 
                     }
 
+                    if (draggedDetails.Name.Equals(nameof(ChessPiece.WHITEKING)) || draggedDetails.Name.Equals(nameof(ChessPiece.BLACKKING)))
+                    {
+                        var color = FindColor(draggedDetails.Name);
+                        int[,] kingMoves = new int[,]
+                            {
+                              { -1, -1 }, { -1, 0 }, { -1, 1 },
+                              { 0, -1 }, { 0, 1 },
+                              { 1, -1 }, { 1, 0 }, { 1, 1 }
+                            };
+                        (int,int)? king2L = FindKing(color);
+                        var kingRow = king2L.Value.Item1;
+                        var kingCol=king2L.Value.Item2;
+                        bool isValids = KingValidMove(eX, eY, kingRow,kingCol, kingMoves) &&
+                                      !IsKingCLose(eX, eY, kingRow, kingCol, kingMoves);
 
+
+                        if (isValids) {
+
+                            if ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
+                              ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(color) ||
+                              buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null))
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }                    
+
+                        return false;
+
+                    }
                 }
 
                 return isValid;
@@ -574,7 +607,37 @@ namespace ChessGame
                 return false;
             }
         }
+        public bool KingValidMove(int currRow, int currCol, int newRow, int newCol, int[,] kingMoves)
+        {
+            for (int i = 0; i < kingMoves.GetLength(0); i++)
+            {
+                int newRowCheck = currRow + kingMoves[i, 0];
+                int newColCheck = currCol + kingMoves[i, 1];
 
+                if (newRow == newRowCheck && newCol == newColCheck)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public  bool IsKingCLose(int king1Row, int king1Col, int king2Row, int king2Col, int[,] kingMoves)
+        {
+            for (int i = 0; i < kingMoves.GetLength(0); i++)
+            {
+                int checkRow = king1Row + kingMoves[i, 0];
+                int checkCol = king1Col + kingMoves[i, 1];
+
+                if (king2Row == checkRow && king2Col == checkCol)
+                {
+                    return true;
+                }
+            }
+
+            return king1Row == king2Row && king1Col == king2Col;
+        }
         private bool CheckStraightPos(int stX, int stY, int eX, int eY)
         {
             bool isValid = false;
@@ -620,6 +683,26 @@ namespace ChessGame
         {
             var color = piece.Contains("WHITE") ? "BLACK" : "WHITE";
             return color;
+        }
+
+
+        private (int,int)? FindKing(string color)
+        {
+            
+          foreach(var button in buttons)
+            {
+                if(button?.Image?.Tag is PieceDetails)
+                {
+
+                    var piDetails = ((PieceDetails)button.Image.Tag);
+                    if(piDetails.Color==color && piDetails.Name.Contains("KING"))
+                    {
+                        return new(piDetails.CurrentPoint.Value.X,piDetails.CurrentPoint.Value.Y);
+                    }
+                }
+
+            }
+            return null;
         }
 
         private List<(int, int)> GetDiagonalPoints((int, int) startPoint, (int, int) endPoint)
