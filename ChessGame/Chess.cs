@@ -20,7 +20,7 @@ namespace ChessGame
         private const string RIGHT = "RIGHT";
         private const string LEFT = "LEFT";
         private const string UP = "UP";
-        private const string DOWN = "DOWN";      
+        private const string DOWN = "DOWN";
 
         public Chess()
         {
@@ -136,25 +136,27 @@ namespace ChessGame
                         {
                             buttons[row, col].BackColor = color2;
                         }
-                       
+
                         panel2.Controls.Add(buttons[row, col]);
+
+
                     }
                 }
 
                 // Event handlers for panel2 to handle drag-and-drop operations
                 panel2.DragEnter += Panel2_DragEnter;
                 panel2.DragDrop += Panel2_DragDrop;
-                
-               
+
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error in CreateButtons method: {ex.ToString()}");
             }
-        }      
+        }
 
 
-       
+
         private void OnFormResize(object sender, EventArgs e)
         {
             try
@@ -181,60 +183,55 @@ namespace ChessGame
             }
         }
 
-        private void InitializeComponent()
+
+        public void InitializeComponent()
         {
-            try
-            {
-                panel1 = new Panel();
-                panel2 = new Panel();
-                this.button1 = new Button();
-                panel1.SuspendLayout();
-                SuspendLayout();
-                // 
-                // panel1
-                // 
-                panel1.AutoSize = true;
-                panel1.Controls.Add(this.button1);
-                panel1.Location = new Point(1, 1);
-                panel1.Name = "panel1";
-                panel1.Size = new Size(982, 94);
-                panel1.TabIndex = 0;
-                // 
-                // panel2
-                // 
-                panel2.AutoSize = true;
-                panel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                panel2.Location = new Point(0, 98);
-                panel2.Name = "panel2";
-                panel2.Size = new Size(0, 0);
-                panel2.TabIndex = 1;
-                // 
-                // button1
-                // 
-                this.button1.Location = new Point(433, 33);
-                this.button1.Name = "button1";
-                this.button1.Size = new Size(94, 29);
-                this.button1.TabIndex = 0;
-                this.button1.Text = "button1";
-                this.button1.UseVisualStyleBackColor = true;
-                // 
-                // Chess
-                // 
-                AutoScaleDimensions = new SizeF(8F, 20F);
-                AutoScaleMode = AutoScaleMode.Font;
-                ClientSize = new Size(982, 953);
-                Controls.Add(panel2);
-                Controls.Add(panel1);
-                Name = "Chess";
-                Text = "Chess";
-                panel1.ResumeLayout(false);
-                ResumeLayout(false);
-                PerformLayout();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error in InitializeComponent method: {ex.ToString()}");
-            }
+            panel1 = new Panel();
+            button1 = new Button();
+            panel2 = new Panel();
+            panel1.SuspendLayout();
+            SuspendLayout();
+            // 
+            // panel1
+            // 
+            panel1.AutoSize = true;
+            panel1.Controls.Add(button1);
+            panel1.Location = new Point(1, 1);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(982, 94);
+            panel1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(433, 33);
+            button1.Name = "button1";
+            button1.Size = new Size(94, 29);
+            button1.TabIndex = 0;
+            button1.Text = "Restart";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // panel2
+            // 
+            panel2.AutoSize = true;
+            panel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panel2.Location = new Point(0, 98);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(0, 0);
+            panel2.TabIndex = 1;
+            // 
+            // Chess
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(982, 953);
+            Controls.Add(panel2);
+            Controls.Add(panel1);
+            Name = "Chess";
+            Text = "Chess";
+            panel1.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private void Panel2_DragEnter(object sender, DragEventArgs e)
@@ -242,7 +239,7 @@ namespace ChessGame
             try
             {
                 e.Effect = DragDropEffects.Move; // Set the drag effect to Move
-               
+
             }
             catch (Exception ex)
             {
@@ -285,19 +282,19 @@ namespace ChessGame
                     Point clientPoint = panel2.PointToClient(new Point(e.X, e.Y));
                     Button targetButton = GetButtonFromPoint(clientPoint);
 
-                    
+
 
                     if (targetButton != null && targetButton != draggedButton && ValidateMove(targetButton))
                     {
 
                         ((PieceDetails)draggedImage.Tag).CurrentPoint = (Point)targetButton.Tag;
                         targetButton.Image = draggedImage;
-                     
+
                         if (draggedImage.Tag is PieceDetails)
                         {
                             DisableSide(((PieceDetails)draggedImage.Tag).Color);
                         }
-                  
+
 
                     }
                     else
@@ -769,56 +766,13 @@ namespace ChessGame
 
             return diagPoints;
         }
-        private Tuple<Point, string?> GetTagValues(Button button)
+      
+
+        private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                return (Tuple<Point, string?>)button.Tag;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error in GetTagValues method: {ex.ToString()}");
-                return null;
-            }
-        }
-
-
-
-        public string GetDirection()
-        {
-            try
-            {
-                int deltaX = endPoint.X - startPoint.X;
-                int deltaY = endPoint.Y - startPoint.Y;
-
-                if (Math.Abs(deltaX) > Math.Abs(deltaY))
-                {
-                    if (deltaX > 0)
-                    {
-                        return RIGHT;
-                    }
-                    else
-                    {
-                        return LEFT;
-                    }
-                }
-                else
-                {
-                    if (deltaY > 0)
-                    {
-                        return DOWN;
-                    }
-                    else
-                    {
-                        return UP;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error in GetDirection method: {ex.ToString()}");
-                return null;
-            }
+            CreateButtons();
+            this.Resize += new EventHandler(OnFormResize);
+            CenterPanel();
         }
     }
 
