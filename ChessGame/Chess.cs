@@ -1,4 +1,5 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System.Drawing;
+using System.Reflection.PortableExecutable;
 using static System.Windows.Forms.AxHost;
 
 namespace ChessGame
@@ -19,7 +20,7 @@ namespace ChessGame
         private const string RIGHT = "RIGHT";
         private const string LEFT = "LEFT";
         private const string UP = "UP";
-        private const string DOWN = "DOWN";
+        private const string DOWN = "DOWN";      
 
         public Chess()
         {
@@ -135,7 +136,7 @@ namespace ChessGame
                         {
                             buttons[row, col].BackColor = color2;
                         }
-                        //  buttons[row, col].Tag = new Point(row, col);
+                       
                         panel2.Controls.Add(buttons[row, col]);
                     }
                 }
@@ -143,13 +144,17 @@ namespace ChessGame
                 // Event handlers for panel2 to handle drag-and-drop operations
                 panel2.DragEnter += Panel2_DragEnter;
                 panel2.DragDrop += Panel2_DragDrop;
+                
+               
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error in CreateButtons method: {ex.ToString()}");
             }
-        }
+        }      
 
+
+       
         private void OnFormResize(object sender, EventArgs e)
         {
             try
@@ -237,6 +242,7 @@ namespace ChessGame
             try
             {
                 e.Effect = DragDropEffects.Move; // Set the drag effect to Move
+               
             }
             catch (Exception ex)
             {
@@ -249,6 +255,27 @@ namespace ChessGame
             return row >= 0 && row < 8 && col >= 0 && col < 8;
         }
 
+        private void DisableSide(string color)
+        {
+            foreach (var button in buttons)
+            {
+                if (button?.Image?.Tag is PieceDetails)
+                {
+                    if (((PieceDetails)button?.Image?.Tag).Color == color)
+                    {
+
+                        button.Enabled = false;
+
+                    }
+                    else
+                    {
+                        button.Enabled = true;
+                    }
+                }
+            }
+
+        }
+
         private void Panel2_DragDrop(object sender, DragEventArgs e)
         {
             try
@@ -258,12 +285,19 @@ namespace ChessGame
                     Point clientPoint = panel2.PointToClient(new Point(e.X, e.Y));
                     Button targetButton = GetButtonFromPoint(clientPoint);
 
+                    
 
                     if (targetButton != null && targetButton != draggedButton && ValidateMove(targetButton))
                     {
 
                         ((PieceDetails)draggedImage.Tag).CurrentPoint = (Point)targetButton.Tag;
                         targetButton.Image = draggedImage;
+                     
+                        if (draggedImage.Tag is PieceDetails)
+                        {
+                            DisableSide(((PieceDetails)draggedImage.Tag).Color);
+                        }
+                  
 
                     }
                     else
@@ -320,6 +354,7 @@ namespace ChessGame
                         isDragging = true;
                         button.Image = null; // Clear the image from the original button
                         panel2.DoDragDrop(button, DragDropEffects.Move); // Start drag-and-drop operation
+
                     }
                     startPoint = e.Location;
                 }
@@ -452,7 +487,7 @@ namespace ChessGame
 
                         if (diagPoints?.Any() == true)
                         {
-                            for (int i = 1; i <= diagPoints.Count-1; i++)
+                            for (int i = 1; i <= diagPoints.Count - 1; i++)
                             {
                                 if ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image != null &&
 
@@ -467,7 +502,7 @@ namespace ChessGame
                                     )
                                 {
                                     return true;
-                                }                            
+                                }
 
 
                             }
@@ -571,7 +606,7 @@ namespace ChessGame
                         (int, int)? king2L = FindKing(colors.primaryColor);
                         var kingRow = king2L.Value.Item1;
                         var kingCol = king2L.Value.Item2;
-                        bool isValids = KingValidMove(stX,stY,eX, eY, kingMoves) &&
+                        bool isValids = KingValidMove(stX, stY, eX, eY, kingMoves) &&
                                       !IsKingCLose(eX, eY, kingRow, kingCol, kingMoves);
 
 
