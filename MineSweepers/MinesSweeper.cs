@@ -1,9 +1,5 @@
 ﻿namespace MineSweepers
 {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-
     public partial class Minesweeper : Form
     {
         private int numRows = 24;
@@ -24,7 +20,7 @@
         private ComboBox cmbLevel;
         private Timer timer;
         private int secondsElapsed;
-        private int buttonSize = 30;
+        private readonly int buttonSize = 30;
 
         public Minesweeper()
         {
@@ -52,7 +48,7 @@
 
         private void PlaceMines()
         {
-            Random rand = new Random();
+            Random rand = new();
             int minesPlaced = 0;
 
             while (minesPlaced < numMines)
@@ -74,7 +70,9 @@
                 for (int col = 0; col < numCols; col++)
                 {
                     if (gameBoard[row, col] == -1)
+                    {
                         continue;
+                    }
 
                     int mineCount = 0;
 
@@ -133,7 +131,7 @@
 
         private void Button_MouseUp(object sender, MouseEventArgs e)
         {
-            Button btn = sender as Button;
+            Button? btn = sender as Button;
             Point point = (Point)btn.Tag;
             int row = point.X;
             int col = point.Y;
@@ -151,7 +149,9 @@
         private void RevealCell(int row, int col)
         {
             if (!IsInBounds(row, col) || buttons[row, col].Enabled == false)
+            {
                 return;
+            }
 
             if (gameBoard[row, col] == -1)
             {
@@ -160,7 +160,7 @@
                 button1.Image = null;
                 button1.Image = Properties.Resources.Ssad;
                 RevealAllMines();
-                MessageBox.Show("Game Over! You hit a mine.");
+                _ = MessageBox.Show("Game Over! You hit a mine.");
                 return;
             }
 
@@ -412,17 +412,21 @@
                 for (int col = 0; col < numCols; col++)
                 {
                     if (gameBoard[row, col] != -1 && buttons[row, col].Enabled)
+                    {
                         return;
+                    }
                 }
             }
 
-            MessageBox.Show("Congratulations! You've cleared the minefield!");
+            _ = MessageBox.Show("Congratulations! You've cleared the minefield!");
         }
 
         private void InitializeTimer()
         {
-            timer = new Timer();
-            timer.Interval = 1000;
+            timer = new Timer
+            {
+                Interval = 1000
+            };
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -443,9 +447,9 @@
 
         private void AdjustWindowSize()
         {
-            int windowWidth = panel2.Width + (this.Width - this.ClientSize.Width);
-            int windowHeight = panel2.Height + panel1.Height + (this.Height - this.ClientSize.Height);
-            this.Size = new Size(windowWidth, windowHeight);
+            int windowWidth = panel2.Width + (Width - ClientSize.Width);
+            int windowHeight = panel2.Height + panel1.Height + (Height - ClientSize.Height);
+            Size = new Size(windowWidth, windowHeight);
         }
     }
 }

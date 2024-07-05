@@ -5,9 +5,9 @@
         private Panel panel1;
         private Panel panel2;
         private Button[,] buttons;
-        private int buttonSize = 100;
-        private Button draggedButton;
-        private Image draggedImage;
+        private readonly int buttonSize = 100;
+        private Button? draggedButton;
+        private Image? draggedImage;
         private Point originalLocation;
         private bool isDragging = false;
         private Point startPoint;
@@ -18,29 +18,29 @@
         private const string UP = "UP";
         private const string DOWN = "DOWN";
 
-        private string _Human = null;
-        private string _AI = null;
-        private string userColor = null;
+        private string? _Human = null;
+        private string? _AI = null;
+        private string? userColor = null;
         private bool isAIPlay = false;
 
-        private int intit = 1;
+        private readonly int intit = 1;
 
-        private Dictionary<Point, PieceDetails?> kp = new Dictionary<Point, PieceDetails?>();
+        private readonly Dictionary<Point, PieceDetails?> kp = [];
         public Chess()
         {
             try
             {
                 InitializeComponent();
 
-                this.Resize += new EventHandler(OnFormResize);
-                this.Load += new EventHandler(LoadButtons);
-                this.Shown += new EventHandler(LoadPopup);
+                Resize += new EventHandler(OnFormResize);
+                Load += new EventHandler(LoadButtons);
+                Shown += new EventHandler(LoadPopup);
 
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in Chess constructor: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in Chess constructor: {ex}");
             }
         }
         private void LoadButtons(object sender, EventArgs e)
@@ -63,19 +63,21 @@
                 buttons = new Button[8, 8];
                 panel2.Size = new Size(8 * buttonSize, 8 * buttonSize);
                 panel2.AllowDrop = true; // Enable dropping on panel2
-                var color1 = Color.Wheat;
-                var color2 = Color.SaddleBrown;
+                Color color1 = Color.Wheat;
+                Color color2 = Color.SaddleBrown;
                 int i = 0;
                 for (int row = 0; row < 8; row++)
                 {
                     for (int col = 0; col < 8; col++)
                     {
-                        buttons[row, col] = new Button();
-                        buttons[row, col].Size = new Size(buttonSize, buttonSize);
-                        buttons[row, col].Location = new Point(buttonSize * col, buttonSize * row);
-                        buttons[row, col].Tag = new Point(row, col);
-                        buttons[row, col].UseVisualStyleBackColor = true;
-                        buttons[row, col].FlatStyle = FlatStyle.Popup;
+                        buttons[row, col] = new Button
+                        {
+                            Size = new Size(buttonSize, buttonSize),
+                            Location = new Point(buttonSize * col, buttonSize * row),
+                            Tag = new Point(row, col),
+                            UseVisualStyleBackColor = true,
+                            FlatStyle = FlatStyle.Popup
+                        };
 
                         buttons[row, col].MouseDown += new MouseEventHandler(Button_MouseDown);
                         buttons[row, col].MouseMove += new MouseEventHandler(Button_MouseMove);
@@ -165,18 +167,11 @@
                             buttons[row, col].Enabled = false;
                         }
                         // Alternate colors
-                        if ((row + col) % 2 == 0)
-                        {
-                            buttons[row, col].BackColor = color1;
-                        }
-                        else
-                        {
-                            buttons[row, col].BackColor = color2;
-                        }
+                        buttons[row, col].BackColor = (row + col) % 2 == 0 ? color1 : color2;
                         if (buttons[row, col]?.Image?.Tag is PieceDetails)
                         {
-                            var pts = (Point)buttons[row, col].Tag;
-                            var pieceDetails = (PieceDetails)buttons[row, col].Image.Tag;
+                            Point pts = (Point)buttons[row, col].Tag;
+                            PieceDetails? pieceDetails = (PieceDetails)buttons[row, col].Image.Tag;
                             kp.Add(pts, pieceDetails);
                         }
                         else
@@ -195,7 +190,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in CreateButtons method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in CreateButtons method: {ex}");
             }
         }
 
@@ -218,7 +213,7 @@
             }
             else if (res == DialogResult.Cancel)
             {
-                this.Close();
+                Close();
             }
             if (_AI == "WHITE")
             {
@@ -233,12 +228,12 @@
             try
             {
 
-                Dictionary<int, Point> blackColor = new Dictionary<int, Point>();
-                Dictionary<int, Point> whiteColor = new Dictionary<int, Point>();
-                Dictionary<int, Point> targetEmptyPoints = new Dictionary<int, Point>();
-                Dictionary<string, int> movementCount = new Dictionary<string, int>();
-                List<(string, ((int, int), (int, int)))> lis = new List<(string, ((int, int), (int, int)))>();
-                List<PieceDetails> PI = new List<PieceDetails>();
+                Dictionary<int, Point> blackColor = [];
+                Dictionary<int, Point> whiteColor = [];
+                Dictionary<int, Point> targetEmptyPoints = [];
+                Dictionary<string, int> movementCount = [];
+                List<(string, ((int, int), (int, int)))> lis = [];
+                List<PieceDetails> PI = [];
 
 
 
@@ -247,10 +242,10 @@
                 //int tarEmpCtn = 1;
                 foreach (Button button in buttons)
                 {
-                    var pt = ((Point)button.Tag);
+                    Point pt = (Point)button.Tag;
                     if (button?.Image?.Tag is PieceDetails)
                     {
-                        var pis = button.Image.Tag as PieceDetails;
+                        PieceDetails? pis = button.Image.Tag as PieceDetails;
 
                         if (((PieceDetails)button.Image.Tag).Color == "WHITE")
                         {
@@ -273,29 +268,25 @@
 
                 // possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
 
-                var dd = PI;
+                List<PieceDetails> dd = PI;
 
 
             DragPoints:
 
-                Random fromRandom = new Random();
-
-
-
-                Button startBtn = null;
+                Random fromRandom = new();
                 Button targetBtn = null;
 
-                Point points = new Point();
+                Point points = new();
                 if (_AI == "WHITE")
                 {
                     int fromRow = fromRandom.Next(whiteColor.Keys.Min(), whiteColor.Keys.Max());
-                    whiteColor.TryGetValue(fromRow, out points);
+                    _ = whiteColor.TryGetValue(fromRow, out points);
                     possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
                 }
                 else
                 {
                     int fromRow = fromRandom.Next(blackColor.Keys.Min(), blackColor.Keys.Max());
-                    blackColor.TryGetValue(fromRow, out points);
+                    _ = blackColor.TryGetValue(fromRow, out points);
                     possibleMoveCount = whiteColor.Count + targetEmptyPoints.Count;
                 }
 
@@ -305,8 +296,8 @@
 
                 draggedButton = buttons[points.X, points.Y];
 
-                var drgButton = ((PieceDetails)(draggedButton.Image.Tag));
-                movementCount.TryGetValue(drgButton.Id, out int movPiece);
+                PieceDetails? drgButton = (PieceDetails)draggedButton.Image.Tag;
+                _ = movementCount.TryGetValue(drgButton.Id, out int movPiece);
 
                 if (movPiece >= 48)
                 {
@@ -320,22 +311,15 @@
             //int targCol = targetRandom.Next(0, 8);
             TargetEmptyPoints:
 
-                Random toRandom = new Random();
+                Random toRandom = new();
 
 
 
                 //   var ff= targetHumanpoints.Union(targetEmptyPoints).ToDictionary(k => k.Key, v => v.Value);
-                Dictionary<int, Point> tgt = new Dictionary<int, Point>();
-                if (_AI == "WHITE")
-                {
-                    tgt = blackColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
-                }
-                else
-                {
-                    tgt = whiteColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
-
-
-                }
+                Dictionary<int, Point> tgt = [];
+                tgt = _AI == "WHITE"
+                    ? blackColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value)
+                    : whiteColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
                 //  var tgt = whiteColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
 
                 //foreach (var kvp in targetEmptyPoints) {
@@ -344,7 +328,7 @@
                 //}
                 //var tgt = targetHumanpoints.Concat(targetEmptyPoints).ToDictionary(c => c.Key, c => c.Value);
                 int fromCol = toRandom.Next(tgt.Keys.Min(), tgt.Keys.Max());
-                tgt.TryGetValue(fromCol, out var tgtPtn);
+                _ = tgt.TryGetValue(fromCol, out Point tgtPtn);
 
 
 
@@ -376,20 +360,20 @@
                 }
                 else
                 {
-                    var drgPt = draggedButton.Image.Tag as PieceDetails;
+                    PieceDetails? drgPt = draggedButton.Image.Tag as PieceDetails;
 
                     if (movementCount.ContainsKey(drgPt.Id))
                     {
-                        movementCount.TryGetValue(drgPt.Id, out var num);
+                        _ = movementCount.TryGetValue(drgPt.Id, out int num);
                         movementCount[drgPt.Id] += 1;
                     }
                     else
                     {
-                        movementCount.TryAdd(drgPt.Id, 1);
+                        _ = movementCount.TryAdd(drgPt.Id, 1);
                     }
                     if (movementCount.ContainsKey(drgPt.Id))
                     {
-                        movementCount.TryGetValue(drgPt.Id, out var num);
+                        _ = movementCount.TryGetValue(drgPt.Id, out int num);
 
                         if (num < possibleMoveCount)
                         {
@@ -402,7 +386,7 @@
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
 
             {
 
@@ -424,7 +408,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in OnFormResize method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in OnFormResize method: {ex}");
             }
         }
 
@@ -432,14 +416,14 @@
         {
             try
             {
-                int x = (this.ClientSize.Width - panel2.Width) / 2;
-                int y = (this.ClientSize.Height - panel2.Height) / 2;
+                int x = (ClientSize.Width - panel2.Width) / 2;
+                int y = (ClientSize.Height - panel2.Height) / 2;
                 panel2.Location = new Point(x, y);
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in CenterPanel method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in CenterPanel method: {ex}");
             }
         }
 
@@ -503,7 +487,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in Panel2_DragEnter method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in Panel2_DragEnter method: {ex}");
             }
         }
         private bool IsValidPosition(int row, int col)
@@ -514,20 +498,11 @@
 
         private void DisableSide(string color)
         {
-            foreach (var button in buttons)
+            foreach (Button button in buttons)
             {
                 if (button?.Image?.Tag is PieceDetails)
                 {
-                    if (((PieceDetails)button?.Image?.Tag).Color == color)
-                    {
-
-                        button.Enabled = false;
-
-                    }
-                    else
-                    {
-                        button.Enabled = true;
-                    }
+                    button.Enabled = ((PieceDetails)button?.Image?.Tag).Color != color;
                 }
             }
             // Reset the dragging state
@@ -537,7 +512,7 @@
             Cursor.Current = Cursors.Default; // Reset cursor
             if (isAIPlay)
             {
-                this.AIPlays(_AI);
+                AIPlays(_AI);
             }
         }
 
@@ -554,17 +529,16 @@
 
                     if (targetButton != null && targetButton != draggedButton && ValidateMove(targetButton))
                     {
-
+                        var currentPoint = ((PieceDetails)draggedImage.Tag).CurrentPoint;
                         ((PieceDetails)draggedImage.Tag).CurrentPoint = (Point)targetButton.Tag;
                         targetButton.Image = draggedImage;
 
-                        kp.TryGetValue((Point)targetButton.Tag, out var pieceDetails);
-                        if (pieceDetails != null)
+                        if (kp.ContainsKey((Point)(draggedImage.Tag as PieceDetails).CurrentPoint))
                         {
-
-                            kp.TryAdd((Point)draggedImage.Tag, ((PieceDetails)draggedImage.Tag));
-
+                            kp[(Point)(draggedImage.Tag as PieceDetails).CurrentPoint] = (PieceDetails)draggedImage.Tag;
+                            kp[currentPoint.Value] = null;
                         }
+
 
                         if (draggedImage.Tag is PieceDetails)
                         {
@@ -572,9 +546,7 @@
 
                             DisableSide(((PieceDetails)draggedImage.Tag).Color);
                             return;
-
                         }
-
 
                     }
                     else
@@ -592,11 +564,11 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in Panel2_DragDrop method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in Panel2_DragDrop method: {ex}");
             }
         }
 
-        private Button GetButtonFromPoint(Point clientPoint)
+        private Button? GetButtonFromPoint(Point clientPoint)
         {
             try
             {
@@ -611,7 +583,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in GetButtonFromPoint method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in GetButtonFromPoint method: {ex}");
                 return null;
             }
         }
@@ -622,15 +594,14 @@
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    Button button = sender as Button;
-                    if (button != null && button.Image != null)
+                    if (sender is Button button && button.Image != null)
                     {
                         draggedButton = button;
                         draggedImage = button.Image;
                         originalLocation = button.Location;
                         isDragging = true;
                         button.Image = null; // Clear the image from the original button
-                        panel2.DoDragDrop(button, DragDropEffects.Move); // Start drag-and-drop operation
+                        _ = panel2.DoDragDrop(button, DragDropEffects.Move); // Start drag-and-drop operation
 
                     }
                     startPoint = e.Location;
@@ -638,7 +609,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in Button_MouseDown method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in Button_MouseDown method: {ex}");
             }
         }
 
@@ -653,7 +624,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in Button_MouseMove method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in Button_MouseMove method: {ex}");
             }
         }
 
@@ -668,7 +639,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in Button_MouseUp method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in Button_MouseUp method: {ex}");
             }
         }
 
@@ -682,7 +653,7 @@
                 int eX = 0;
                 int eY = 0;
                 bool isImage = false;
-                PieceDetails targetDetials = new PieceDetails();
+                PieceDetails targetDetials = new();
                 if (!IsValidPosition(eX, eY))
                 {
                     return false;
@@ -698,27 +669,21 @@
                     }
                     if (destPlace?.Tag is Point)
                     {
-                        var tgtPoint = (Point)destPlace.Tag;
+                        Point tgtPoint = (Point)destPlace.Tag;
                         eX = tgtPoint.X;
                         eY = tgtPoint.Y;
                     }
-                    var draggedDetails = draggedImage.Tag as PieceDetails;
-
-                    //if (draggedDetails.Color != _Human)
-                    //{
-
-                    //    return false;
-                    //}
+                    PieceDetails? draggedDetails = draggedImage.Tag as PieceDetails;
 
                     stX = draggedDetails.CurrentPoint.Value.X;
                     stY = draggedDetails.CurrentPoint.Value.Y;
-                    var colors = FindColor(draggedDetails.Name);
+                    (string primaryColor, string secondaryColor) colors = FindColor(draggedDetails.Name);
 
                     if (draggedDetails.Name.Contains(nameof(ChessPiece.WHITEPAWN)))
                     {
-                        if (((eX > stX && Math.Abs(eX - stX) == 1) && stY == eY && isImage == false) ||
+                        if ((eX > stX && Math.Abs(eX - stX) == 1 && stY == eY && isImage == false) ||
                              (stX == 1 && Math.Abs(eX - stX) == 2 && stY == eY && isImage == false) ||
-                             ((eX > stX && Math.Abs(eX - stX) == 1) && Math.Abs(stY - eY) == 1) && isImage && targetDetials.Color.Equals("BLACK"))
+                             (eX > stX && Math.Abs(eX - stX) == 1 && Math.Abs(stY - eY) == 1 && isImage && targetDetials.Color.Equals("BLACK")))
                         {
                             isValid = true;
 
@@ -727,9 +692,9 @@
                     else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKPAWN)))
                     {
 
-                        if (((stX > eX && Math.Abs(stX - eX) == 1) && stY == eY && isImage == false) ||
+                        if ((stX > eX && Math.Abs(stX - eX) == 1 && stY == eY && isImage == false) ||
                               (stX == 6 && eX - stX == -2 && stY == eY && isImage == false) ||
-                              ((stX > eX && Math.Abs(stX - eX) == 1) && Math.Abs(stY - eY) == 1) && isImage && targetDetials.Color.Equals("WHITE"))
+                              (stX > eX && Math.Abs(stX - eX) == 1 && Math.Abs(stY - eY) == 1 && isImage && targetDetials.Color.Equals("WHITE")))
                         {
                             isValid = true;
 
@@ -740,77 +705,32 @@
                     {
 
 
-                        if (CheckStraightPos(stX, stY, eX, eY) == false)
-                        {
-                            return false;
-                        }
-
-                        if (
-                           (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
+                        return CheckStraightPos(stX, stY, eX, eY) != false
+&& ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
                             ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) && (stX == eX || stY == eY))
-                              || (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null && (stX == eX || stY == eY))
-                            )
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-
+                              || (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null && (stX == eX || stY == eY)));
                     }
 
                     else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKQUEEN)) || draggedDetails.Name.Contains(nameof(ChessPiece.WHITEQUEEN)))
                     {
-                        var diagPoints = GetDiagonalPoints((stX, stY), (eX, eY));
+                        List<(int, int)> diagPoints = GetDiagonalPoints((stX, stY), (eX, eY));
 
-                        if (diagPoints?.Any() == true)
-                        {
-                            if (ValidateDiagonalMoves(eX, eY, colors, diagPoints))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                        if (CheckStraightPos(stX, stY, eX, eY) == false)
-                        {
-                            return false;
-                        }
-
-
-                        if (
-                           (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
+                        return diagPoints?.Any() == true
+                            ? ValidateDiagonalMoves(eX, eY, colors, diagPoints)
+                            : CheckStraightPos(stX, stY, eX, eY) != false
+&& ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
                             ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) && (stX == eX || stY == eY))
-                              || (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null && (stX == eX || stY == eY))
-                            )
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-
+                              || (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null && (stX == eX || stY == eY)));
                     }
 
                     else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKBISHOP)) || draggedDetails.Name.Contains(nameof(ChessPiece.WHITEBISHOP)))
                     {
-                        var diagPoints = GetDiagonalPoints((stX, stY), (eX, eY));
+                        List<(int, int)> diagPoints = GetDiagonalPoints((stX, stY), (eX, eY));
 
                         if (diagPoints?.Any() == true)
                         {
 
-                            if (ValidateDiagonalMoves(eX, eY, colors, diagPoints))
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            return ValidateDiagonalMoves(eX, eY, colors, diagPoints);
 
                         }
 
@@ -833,14 +753,9 @@
                             if (newX == eX && newY == eY && IsValidPosition(newX, newY))
                             {
 
-                                if ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
-                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) ||
-                            buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null))
-                                {
-                                    return true;
-                                }
-
-                                return false;
+                                return (buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
+                            ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor)) ||
+                            buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null;
                             }
                         }
 
@@ -859,8 +774,8 @@
                               { 1, -1 }, { 1, 0 }, { 1, 1 }
                             };
                         (int, int)? king2L = FindKing(colors.primaryColor);
-                        var kingRow = king2L.Value.Item1;
-                        var kingCol = king2L.Value.Item2;
+                        int kingRow = king2L.Value.Item1;
+                        int kingCol = king2L.Value.Item2;
                         bool isValids = KingValidMove(stX, stY, eX, eY, kingMoves) &&
                                       !IsKingCLose(eX, eY, kingRow, kingCol, kingMoves);
 
@@ -869,8 +784,8 @@
                         {
 
                             if ((buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image != null &&
-                              ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor) ||
-                              buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null))
+                              ((PieceDetails)buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image?.Tag).Color.Equals(colors.primaryColor)) ||
+                              buttons[((Point)destPlace.Tag).X, ((Point)destPlace.Tag).Y]?.Image == null)
                             {
                                 return true;
                             }
@@ -889,7 +804,7 @@
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error in ValidateMove method: {ex.ToString()}");
+                _ = MessageBox.Show($"Error in ValidateMove method: {ex}");
                 return false;
             }
         }
@@ -900,22 +815,13 @@
             {
                 for (int i = 1; i <= diagPoints.Count - 1; i++)
                 {
-                    var btnImage = (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image);
+                    Image? btnImage = buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image;
 
-                    if (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag is PieceDetails)
+                    if (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag is PieceDetails pieceDetails)
                     {
-                        var pieceDetails = ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag);
-
                         if (btnImage != null && pieceDetails.Color.Equals(colors.primaryColor))
                         {
-                            if (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            return buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY];
                         }
                         else if (btnImage != null && pieceDetails.Color.Equals(colors.secondaryColor))
                         {
@@ -974,9 +880,6 @@
             bool isValid = true;
             int max = 0;
             int min = 0;
-            int cons = 0;
-
-
             int? x1 = null;
             int? y1 = null;
 
@@ -991,7 +894,6 @@
             {
                 max = Math.Max(stY, eY);
                 min = Math.Min(stY, eY);
-                cons = eX;
                 x1 = eX;
 
             }
@@ -1020,12 +922,12 @@
         private (int, int)? FindKing(string color)
         {
 
-            foreach (var button in buttons)
+            foreach (Button button in buttons)
             {
                 if (button?.Image?.Tag is PieceDetails)
                 {
 
-                    var piDetails = ((PieceDetails)button.Image.Tag);
+                    PieceDetails piDetails = (PieceDetails)button.Image.Tag;
                     if (piDetails.Color == color && piDetails.Name.Contains("KING"))
                     {
                         return new(piDetails.CurrentPoint.Value.X, piDetails.CurrentPoint.Value.Y);
@@ -1043,7 +945,7 @@
             int eX = endPoint.Item1;
             int eY = endPoint.Item2;
 
-            List<(int, int)> diagPoints = new List<(int, int)>();
+            List<(int, int)> diagPoints = [];
 
             if (Math.Abs(eX - sX) != Math.Abs(eY - sY))
             {
@@ -1063,8 +965,8 @@
             {
                 diagPoints.Add((x, y));
 
-                x = x + xSteps;
-                y = y + ySteps;
+                x += xSteps;
+                y += ySteps;
             }
 
             return diagPoints;
@@ -1074,7 +976,7 @@
         private void button1_Click(object sender, EventArgs e)
         {
             CreateButtons();
-            this.Resize += new EventHandler(OnFormResize);
+            Resize += new EventHandler(OnFormResize);
             CenterPanel();
         }
     }
