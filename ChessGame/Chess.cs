@@ -324,7 +324,7 @@ namespace ChessGame
 
                 }
 
-                possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
+                // possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
 
                 var dd = PI;
 
@@ -332,22 +332,24 @@ namespace ChessGame
             DragPoints:
 
                 Random fromRandom = new Random();
-        
+
 
 
                 Button startBtn = null;
                 Button targetBtn = null;
 
-                Point points= new Point();
+                Point points = new Point();
                 if (_AI == "WHITE")
-                { 
-                    int fromRow = fromRandom.Next(whiteColor.Keys.Min(),whiteColor.Keys.Max());
+                {
+                    int fromRow = fromRandom.Next(whiteColor.Keys.Min(), whiteColor.Keys.Max());
                     whiteColor.TryGetValue(fromRow, out points);
+                    possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
                 }
                 else
                 {
                     int fromRow = fromRandom.Next(blackColor.Keys.Min(), blackColor.Keys.Max());
                     blackColor.TryGetValue(fromRow, out points);
+                    possibleMoveCount = whiteColor.Count + targetEmptyPoints.Count;
                 }
 
                 // kp.TryGetValue(points, out var startPieceDetails);
@@ -363,7 +365,7 @@ namespace ChessGame
                 {
                     goto DragPoints;
                 }
-              //  draggedButton = buttons[6, 5];
+            //  draggedButton = buttons[6, 5];
 
 
             //Random targetRandom = new Random();
@@ -372,7 +374,7 @@ namespace ChessGame
             TargetEmptyPoints:
 
                 Random toRandom = new Random();
-      
+
 
 
                 //   var ff= targetHumanpoints.Union(targetEmptyPoints).ToDictionary(k => k.Key, v => v.Value);
@@ -825,65 +827,15 @@ namespace ChessGame
 
                         if (diagPoints?.Any() == true)
                         {
-                            for (int i = 1; i <= diagPoints.Count - 1; i++)
+                            if (ValidateDiagonalMoves(eX, eY, colors, diagPoints))
                             {
-                                var btnImage = (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image);
-
-                                if (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag is PieceDetails)
-                                {
-                                    var pieceDetails = ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag);
-
-                                    if (btnImage != null && pieceDetails.Color.Equals(colors.primaryColor))
-                                    {
-                                        if (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
-                                        {
-                                            return true;
-                                        }
-                                        else
-                                        {
-                                            return false;
-                                        }
-                                    }
-                                    else if (btnImage != null && pieceDetails.Color.Equals(colors.secondaryColor))
-                                    {
-                                        return false;
-                                    }
-
-                                }
-                                else if (btnImage == null && buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
-                                {
-                                    return true;
-                                }
-
-                                //if (((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image != null) && ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.secondaryColor)) || ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null) && ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.secondaryColor)))
-                                //{
-                                //    return false;
-                                //}
-
-
-                                //if ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image != null &&
-
-                                //    ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.primaryColor)
-                                //    && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
-
-                                //   && !((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.secondaryColor))
-
-                                //   || ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null)
-                                //   && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY]))
-
-
-                                //    )
-                                //{
-                                //    return true;
-                                //}
-
-
-
+                                return true;
                             }
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
-
-
                         if (CheckStraightPos(stX, stY, eX, eY) == false)
                         {
                             return false;
@@ -911,26 +863,16 @@ namespace ChessGame
 
                         if (diagPoints?.Any() == true)
                         {
-                            for (int i = 1; i <= diagPoints.Count - 1; i++)
+
+                            if (ValidateDiagonalMoves(eX, eY, colors, diagPoints))
                             {
-                                if ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image != null &&
-
-                                    ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.primaryColor)
-                                    && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
-
-                                   && !((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag).Color.Equals(colors.secondaryColor))
-                                   || ((buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image == null)
-                                   && (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY]))
-
-
-                                    )
-                                {
-                                    return true;
-                                }
-
-
+                                return true;
                             }
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
+
                         }
 
                     }
@@ -1012,6 +954,51 @@ namespace ChessGame
                 return false;
             }
         }
+
+        private bool ValidateDiagonalMoves(int eX, int eY, (string primaryColor, string secondaryColor) colors, List<(int, int)> diagPoints)
+        {
+            if (diagPoints?.Any() == true)
+            {
+                for (int i = 1; i <= diagPoints.Count - 1; i++)
+                {
+                    var btnImage = (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image);
+
+                    if (buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag is PieceDetails)
+                    {
+                        var pieceDetails = ((PieceDetails)buttons[diagPoints[i].Item1, diagPoints[i].Item2]?.Image?.Tag);
+
+                        if (btnImage != null && pieceDetails.Color.Equals(colors.primaryColor))
+                        {
+                            if (buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else if (btnImage != null && pieceDetails.Color.Equals(colors.secondaryColor))
+                        {
+                            return false;
+                        }
+
+                    }
+                    else if (btnImage == null && buttons[diagPoints[i].Item1, diagPoints[i].Item2] == buttons[eX, eY])
+                    {
+                        return true;
+                    }
+
+
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool KingValidMove(int currRow, int currCol, int newRow, int newCol, int[,] kingMoves)
         {
             for (int i = 0; i < kingMoves.GetLength(0); i++)
