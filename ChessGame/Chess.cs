@@ -1,9 +1,4 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using System.Reflection.PortableExecutable;
-using static System.Windows.Forms.AxHost;
-
-namespace ChessGame
+﻿namespace ChessGame
 {
     public partial class Chess : Form
     {
@@ -57,54 +52,6 @@ namespace ChessGame
         private void LoadPopup(object sender, EventArgs e)
         {
             SetUser();
-        }
-        private void PerformAIMove()
-        {
-            Random random = new Random();
-            Button selectedButton = null;
-            Button targetButton = null;
-
-            // Select a random piece controlled by the AI
-            while (selectedButton == null)
-            {
-                int row = random.Next(0, 8);
-                int col = random.Next(0, 8);
-
-                if (buttons[row, col].Image != null && ((PieceDetails)buttons[row, col].Image.Tag).Color == "BLACK")
-                {
-                    selectedButton = buttons[row, col];
-                }
-            }
-
-            // Select a random valid move for the selected piece
-            while (targetButton == null)
-            {
-                int newRow = random.Next(0, 8);
-                int newCol = random.Next(0, 8);
-
-                if (ValidateMove(buttons[newRow, newCol]))
-                {
-                    targetButton = buttons[newRow, newCol];
-                }
-            }
-
-            // Perform the move programmatically
-            SimulateMove(selectedButton, targetButton);
-        }
-
-        // Method to simulate the move programmatically
-        private void SimulateMove(Button fromButton, Button toButton)
-        {
-            // Perform the drag and drop operation programmatically
-            if (fromButton != null && toButton != null)
-            {
-                // Simulate drag
-                Image draggedImage = fromButton.Image;
-                fromButton.Image = null;
-
-                // Simulate drop
-                toButton.Image = draggedImage;
-            }
         }
 
 
@@ -467,14 +414,6 @@ namespace ChessGame
         }
 
 
-        private (int rand1, int rand2) GetRandomNum()
-        {
-            Random random = new Random();
-            var rand1 = random.Next(0, 8);
-            var rand2 = random.Next(0, 8);
-            return (rand1, rand2);
-
-        }
         private void OnFormResize(object sender, EventArgs e)
         {
             try
@@ -1138,54 +1077,5 @@ namespace ChessGame
             this.Resize += new EventHandler(OnFormResize);
             CenterPanel();
         }
-    }
-
-    public enum ChessPiece
-    {
-        NONE,
-        WHITEKING,
-        WHITEQUEEN,
-        WHITEELEPHANT,
-        WHITEHORSE,
-        WHITEBISHOP,
-        WHITEPAWN,
-        BLACKKING,
-        BLACKQUEEN,
-        BLACKELEPHANT,
-        BLACKHORSE,
-        BLACKBISHOP,
-        BLACKPAWN
-    }
-
-    public enum Direction
-    {
-        NONE,
-        UP,
-        DOWN,
-        RIGHT,
-        LEFT
-    }
-
-
-
-    public class Board
-    {
-        public string? Direction { get; set; }
-    }
-
-    public class PieceDetails
-    {
-        public PieceDetails()
-        {
-            LinkedPoint = new LinkedList<string>();
-
-        }
-        public string? Id { get; set; }
-        public string? Name { get; set; }
-        public string? Color { get; set; }
-        public Point? CurrentPoint { get; set; }
-        public Image? Img { get; set; }
-        public LinkedList<string> LinkedPoint { get; set; }
-
     }
 }

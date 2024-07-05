@@ -27,7 +27,7 @@
         private int buttonSize = 30;
 
         public Minesweeper()
-        {          
+        {
             flagCount = numMines;
             PreRequest();
         }
@@ -111,18 +111,18 @@
                 {
                     buttons[row, col] = new Button
                     {
-                        Size = new Size(buttonSize, buttonSize), 
+                        Size = new Size(buttonSize, buttonSize),
                         Location = new Point(buttonSize * col, buttonSize * row),
                         Tag = new Point(row, col),
                         Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0),
                         UseVisualStyleBackColor = true,
                         BackColor = Color.DarkGray,
                         FlatStyle = FlatStyle.Popup,
-                        ForeColor = Color.Green,                       
+                        ForeColor = Color.Green,
                         Text = ""
                     };
                     buttons[row, col].ForeColor = Color.Red;
-                   // buttons[row,col].FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+                    // buttons[row,col].FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
                     buttons[row, col].MouseUp += new MouseEventHandler(Button_MouseUp);
                     innerPanel.Controls.Add(buttons[row, col]);
                 }
@@ -396,7 +396,7 @@
             );
 
             innerPanel.Anchor = AnchorStyles.None;
-            
+
         }
 
         protected override void OnResize(EventArgs e)
