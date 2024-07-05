@@ -118,7 +118,6 @@
 
                         if (row == 1 && col >= 0 && col <= 7)
                         {
-
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.WSepoy;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEPAWN) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEPAWN) };
@@ -238,8 +237,6 @@
 
 
                 int ctn = 1;
-                //int tarCtn = 1;
-                //int tarEmpCtn = 1;
                 foreach (Button button in buttons)
                 {
                     Point pt = (Point)button.Tag;
@@ -288,10 +285,7 @@
                     int fromRow = fromRandom.Next(blackColor.Keys.Min(), blackColor.Keys.Max());
                     _ = blackColor.TryGetValue(fromRow, out points);
                     possibleMoveCount = whiteColor.Count + targetEmptyPoints.Count;
-                }
-
-                // kp.TryGetValue(points, out var startPieceDetails);
-
+                }      
 
 
                 draggedButton = buttons[points.X, points.Y];
@@ -303,37 +297,19 @@
                 {
                     goto DragPoints;
                 }
-            //  draggedButton = buttons[6, 5];
-
-
-            //Random targetRandom = new Random();
-            //int targRow = targetRandom.Next(0, 8);
-            //int targCol = targetRandom.Next(0, 8);
+           
             TargetEmptyPoints:
 
                 Random toRandom = new();
-
-
-
-                //   var ff= targetHumanpoints.Union(targetEmptyPoints).ToDictionary(k => k.Key, v => v.Value);
+ 
                 Dictionary<int, Point> tgt = [];
                 tgt = _AI == "WHITE"
                     ? blackColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value)
                     : whiteColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
-                //  var tgt = whiteColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
-
-                //foreach (var kvp in targetEmptyPoints) {
-
-                //    targetHumanpoints.Add(kvp.Key, kvp.Value);
-                //}
-                //var tgt = targetHumanpoints.Concat(targetEmptyPoints).ToDictionary(c => c.Key, c => c.Value);
+               
                 int fromCol = toRandom.Next(tgt.Keys.Min(), tgt.Keys.Max());
                 _ = tgt.TryGetValue(fromCol, out Point tgtPtn);
-
-
-
-                targetBtn = buttons[tgtPtn.X, tgtPtn.Y];
-                // targetBtn = buttons[5, 5];
+                targetBtn = buttons[tgtPtn.X, tgtPtn.Y];                
                 draggedImage = draggedButton?.Image;
 
                 lis.Add((drgButton.Id, ((points.X, points.Y), (tgtPtn.X, tgtPtn.Y))));
@@ -970,9 +946,12 @@
             }
 
             return diagPoints;
+        }      
+
+        private void PriorityMoves(string lastDragged,string targetBtn)
+        {
+
         }
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             CreateButtons();
