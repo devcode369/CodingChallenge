@@ -1,4 +1,6 @@
-﻿namespace ChessGame
+﻿using System.Reflection;
+
+namespace ChessGame
 {
     public partial class Chess : Form
     {
@@ -88,45 +90,45 @@
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WElephant;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEELEPHANT;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEELEPHANT) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEELEPHANT) };
                         }
                         if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WHorse;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEHORSE;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEHORSE) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEHORSE) };
                         }
                         if (buttons[row, col] == buttons[0, 2] || buttons[row, col] == buttons[0, 5])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WMand;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEBISHOP;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEBISHOP) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEBISHOP) };
                         }
                         if (buttons[row, col] == buttons[0, 3])
                         {
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WQueen;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEQUEEN;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEQUEEN), Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEQUEEN) };
                         }
                         if (buttons[row, col] == buttons[0, 4])
                         {
-                            buttons[row, col].Image = ChessGame.Properties.Resources.Wking;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEKING;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEKING), Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEKING) };
                         }
 
                         if (row == 1 && col >= 0 && col <= 7)
                         {
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WSepoy;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEPAWN;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEPAWN) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEPAWN) };
                         }
                         if (row == 6 && col >= 0 && col <= 7)
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BSepoy;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKBISHOP;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKPAWN) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKPAWN) };
                         }
 
@@ -134,31 +136,31 @@
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BElephant;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKELEPHANT;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKELEPHANT) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKELEPHANT) };
                         }
                         if (buttons[row, col] == buttons[7, 1] || buttons[row, col] == buttons[7, 6])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BHorse;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKHORSE;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKHORSE) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKHORSE) };
                         }
                         if (buttons[row, col] == buttons[7, 2] || buttons[row, col] == buttons[7, 5])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BMand;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKPAWN;
                             buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKBISHOP) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKBISHOP) };
                         }
                         if (buttons[row, col] == buttons[7, 3])
                         {
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BQueen;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKQUEEN;
                             buttons[row, col].Image.Tag = new PieceDetails { Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKQUEEN) };
                         }
                         if (buttons[row, col] == buttons[7, 4])
                         {
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BKing;
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKKING;
                             buttons[row, col].Image.Tag = new PieceDetails { Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKKING) };
                         }
                         if (buttons[row, col]?.Image?.Tag is PieceDetails && ((PieceDetails)buttons[row, col]?.Image?.Tag).Color == "BLACK")
@@ -285,7 +287,7 @@
                     int fromRow = fromRandom.Next(blackColor.Keys.Min(), blackColor.Keys.Max());
                     _ = blackColor.TryGetValue(fromRow, out points);
                     possibleMoveCount = whiteColor.Count + targetEmptyPoints.Count;
-                }      
+                }
 
 
                 draggedButton = buttons[points.X, points.Y];
@@ -297,19 +299,19 @@
                 {
                     goto DragPoints;
                 }
-           
+
             TargetEmptyPoints:
 
                 Random toRandom = new();
- 
+
                 Dictionary<int, Point> tgt = [];
                 tgt = _AI == "WHITE"
                     ? blackColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value)
                     : whiteColor.Concat(targetEmptyPoints).GroupBy(kv => kv.Key).ToDictionary(g => g.Key, g => g.First().Value);
-               
+
                 int fromCol = toRandom.Next(tgt.Keys.Min(), tgt.Keys.Max());
                 _ = tgt.TryGetValue(fromCol, out Point tgtPtn);
-                targetBtn = buttons[tgtPtn.X, tgtPtn.Y];                
+                targetBtn = buttons[tgtPtn.X, tgtPtn.Y];
                 draggedImage = draggedButton?.Image;
 
                 lis.Add((drgButton.Id, ((points.X, points.Y), (tgtPtn.X, tgtPtn.Y))));
@@ -319,6 +321,13 @@
 
                     Thread.Sleep(3000);
                     ((PieceDetails)draggedImage.Tag).CurrentPoint = (Point)targetBtn.Tag;
+
+                    if (targetBtn.Image != null) {
+
+                        var pis=targetBtn.Image.Tag as PieceDetails;
+
+                        AssignImagesToButtons(pis.Color=="WHITE"?panelWhite:panelBlack, pis.Name);
+                    }
 
                     targetBtn.Image = draggedImage;
 
@@ -330,7 +339,7 @@
                     }
                     draggedButton = null;
                     draggedImage = null;
-                    buttons[points.X, points.Y].Image = null;
+                    buttons[points.X, points.Y].Image = null;                  
                     return;
 
                 }
@@ -403,27 +412,83 @@
             }
         }
 
+        private void AssignImagesToButtons(Panel panel,string pieceName)
+        {
+            var buttons = panel.Controls.OfType<Button>().ToList();
+            buttons.Sort((b1, b2) => b1.Name.CompareTo(b2.Name));
+            var resourceProperties = typeof(ChessGame.Properties.Resources).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+            var defaultImageProperty = resourceProperties.FirstOrDefault(prop => prop.Name.Contains(pieceName));
+            foreach (var button in buttons)
+            {
+                   button.Visible = true;
 
+                if (button?.Image == null)
+                {
+                    button.BackColor = Color.Wheat;
+                    button.BackgroundImageLayout = ImageLayout.Stretch;
+                    button.Image = (Bitmap)defaultImageProperty.GetValue(null, null);
+                    break;
+                }
+
+            }
+        }
         public void InitializeComponent()
         {
             panel1 = new Panel();
             button1 = new Button();
             panel2 = new Panel();
+            panelBlack = new Panel();
+            button26 = new Button();
+            button27 = new Button();
+            button28 = new Button();
+            button29 = new Button();
+            button30 = new Button();
+            button31 = new Button();
+            button32 = new Button();
+            button33 = new Button();
+            button25 = new Button();
+            button24 = new Button();
+            button23 = new Button();
+            button22 = new Button();
+            button21 = new Button();
+            button20 = new Button();
+            button19 = new Button();
+            button18 = new Button();
+            panelWhite = new Panel();
+            button2 = new Button();
+            button3 = new Button();
+            button4 = new Button();
+            button5 = new Button();
+            button6 = new Button();
+            button7 = new Button();
+            button8 = new Button();
+            button9 = new Button();
+            button10 = new Button();
+            button11 = new Button();
+            button12 = new Button();
+            button13 = new Button();
+            button14 = new Button();
+            button15 = new Button();
+            button16 = new Button();
+            button17 = new Button();
             panel1.SuspendLayout();
+            panelBlack.SuspendLayout();
+            panelWhite.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.AutoSize = true;
+            panel1.BackColor = SystemColors.Control;
             panel1.Controls.Add(button1);
-            panel1.Location = new Point(1, 1);
+            panel1.Location = new Point(117, 1);
             panel1.Name = "panel1";
-            panel1.Size = new Size(982, 94);
+            panel1.Size = new Size(774, 38);
             panel1.TabIndex = 0;
             // 
             // button1
             // 
-            button1.Location = new Point(433, 33);
+            button1.Location = new Point(323, 3);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 0;
@@ -440,16 +505,357 @@
             panel2.Size = new Size(0, 0);
             panel2.TabIndex = 1;
             // 
+            // panelBlack
+            // 
+            panelBlack.BackColor = SystemColors.Control;
+            panelBlack.Controls.Add(button26);
+            panelBlack.Controls.Add(button27);
+            panelBlack.Controls.Add(button28);
+            panelBlack.Controls.Add(button29);
+            panelBlack.Controls.Add(button30);
+            panelBlack.Controls.Add(button31);
+            panelBlack.Controls.Add(button32);
+            panelBlack.Controls.Add(button33);
+            panelBlack.Controls.Add(button25);
+            panelBlack.Controls.Add(button24);
+            panelBlack.Controls.Add(button23);
+            panelBlack.Controls.Add(button22);
+            panelBlack.Controls.Add(button21);
+            panelBlack.Controls.Add(button20);
+            panelBlack.Controls.Add(button19);
+            panelBlack.Controls.Add(button18);
+            panelBlack.Location = new Point(12, 52);
+            panelBlack.Name = "panelBlack";
+            panelBlack.Size = new Size(99, 928);
+            panelBlack.TabIndex = 2;
+            // 
+            // button26
+            // 
+            button26.Location = new Point(11, 861);
+            button26.Name = "button26";
+            button26.Size = new Size(76, 51);
+            button26.TabIndex = 58;
+            button26.UseVisualStyleBackColor = true;
+            button26.Visible = false;
+            // 
+            // button27
+            // 
+            button27.Location = new Point(11, 804);
+            button27.Name = "button27";
+            button27.Size = new Size(76, 51);
+            button27.TabIndex = 57;
+            button27.UseVisualStyleBackColor = true;
+            button27.Visible = false;
+            // 
+            // button28
+            // 
+            button28.Location = new Point(11, 747);
+            button28.Name = "button28";
+            button28.Size = new Size(76, 51);
+            button28.TabIndex = 56;
+            button28.UseVisualStyleBackColor = true;
+            button28.Visible = false;
+            // 
+            // button29
+            // 
+            button29.Location = new Point(11, 690);
+            button29.Name = "button29";
+            button29.Size = new Size(76, 52);
+            button29.TabIndex = 55;
+            button29.UseVisualStyleBackColor = true;
+            button29.Visible = false;
+            // 
+            // button30
+            // 
+            button30.Location = new Point(11, 634);
+            button30.Name = "button30";
+            button30.Size = new Size(76, 52);
+            button30.TabIndex = 54;
+            button30.UseVisualStyleBackColor = true;
+            button30.Visible = false;
+            // 
+            // button31
+            // 
+            button31.Location = new Point(11, 577);
+            button31.Name = "button31";
+            button31.Size = new Size(76, 52);
+            button31.TabIndex = 53;
+            button31.UseVisualStyleBackColor = true;
+            button31.Visible = false;
+            // 
+            // button32
+            // 
+            button32.Location = new Point(11, 520);
+            button32.Name = "button32";
+            button32.Size = new Size(76, 52);
+            button32.TabIndex = 52;
+            button32.UseVisualStyleBackColor = true;
+            button32.Visible = false;
+            // 
+            // button33
+            // 
+            button33.Location = new Point(11, 463);
+            button33.Name = "button33";
+            button33.Size = new Size(76, 52);
+            button33.TabIndex = 51;
+            button33.UseVisualStyleBackColor = true;
+            button33.Visible = false;
+            // 
+            // button25
+            // 
+            button25.Location = new Point(11, 404);
+            button25.Name = "button25";
+            button25.Size = new Size(76, 52);
+            button25.TabIndex = 50;
+            button25.UseVisualStyleBackColor = true;
+            button25.Visible = false;
+            // 
+            // button24
+            // 
+            button24.Location = new Point(11, 347);
+            button24.Name = "button24";
+            button24.Size = new Size(76, 52);
+            button24.TabIndex = 49;
+            button24.UseVisualStyleBackColor = true;
+            button24.Visible = false;
+            // 
+            // button23
+            // 
+            button23.Location = new Point(11, 290);
+            button23.Name = "button23";
+            button23.Size = new Size(76, 52);
+            button23.TabIndex = 5;
+            button23.UseVisualStyleBackColor = true;
+            button23.Visible = false;
+            // 
+            // button22
+            // 
+            button22.Location = new Point(11, 233);
+            button22.Name = "button22";
+            button22.Size = new Size(76, 52);
+            button22.TabIndex = 4;
+            button22.UseVisualStyleBackColor = true;
+            button22.Visible = false;
+            // 
+            // button21
+            // 
+            button21.Location = new Point(11, 177);
+            button21.Name = "button21";
+            button21.Size = new Size(76, 52);
+            button21.TabIndex = 3;
+            button21.UseVisualStyleBackColor = true;
+            button21.Visible = false;
+            // 
+            // button20
+            // 
+            button20.Location = new Point(11, 120);
+            button20.Name = "button20";
+            button20.Size = new Size(76, 52);
+            button20.TabIndex = 2;
+            button20.UseVisualStyleBackColor = true;
+            button20.Visible = false;
+            // 
+            // button19
+            // 
+            button19.Location = new Point(11, 63);
+            button19.Name = "button19";
+            button19.Size = new Size(76, 52);
+            button19.TabIndex = 1;
+            button19.UseVisualStyleBackColor = true;
+            button19.Visible = false;
+            // 
+            // button18
+            // 
+            button18.Location = new Point(11, 6);
+            button18.Name = "button18";
+            button18.Size = new Size(76, 52);
+            button18.TabIndex = 0;
+            button18.UseVisualStyleBackColor = true;
+            button18.Visible = false;
+            // 
+            // panelWhite
+            // 
+            panelWhite.BackColor = SystemColors.Control;
+            panelWhite.Controls.Add(button2);
+            panelWhite.Controls.Add(button3);
+            panelWhite.Controls.Add(button4);
+            panelWhite.Controls.Add(button5);
+            panelWhite.Controls.Add(button6);
+            panelWhite.Controls.Add(button7);
+            panelWhite.Controls.Add(button8);
+            panelWhite.Controls.Add(button9);
+            panelWhite.Controls.Add(button10);
+            panelWhite.Controls.Add(button11);
+            panelWhite.Controls.Add(button12);
+            panelWhite.Controls.Add(button13);
+            panelWhite.Controls.Add(button14);
+            panelWhite.Controls.Add(button15);
+            panelWhite.Controls.Add(button16);
+            panelWhite.Controls.Add(button17);
+            panelWhite.Location = new Point(897, 52);
+            panelWhite.Name = "panelWhite";
+            panelWhite.Size = new Size(99, 928);
+            panelWhite.TabIndex = 59;
+            // 
+            // button2
+            // 
+            button2.BackColor = SystemColors.Control;
+            button2.Location = new Point(11, 861);
+            button2.Name = "button2";
+            button2.Size = new Size(76, 51);
+            button2.TabIndex = 58;
+            button2.UseVisualStyleBackColor = false;
+            button2.Visible = false;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(11, 804);
+            button3.Name = "button3";
+            button3.Size = new Size(76, 51);
+            button3.TabIndex = 57;
+            button3.UseVisualStyleBackColor = true;
+            button3.Visible = false;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(11, 747);
+            button4.Name = "button4";
+            button4.Size = new Size(76, 51);
+            button4.TabIndex = 56;
+            button4.UseVisualStyleBackColor = true;
+            button4.Visible = false;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(11, 690);
+            button5.Name = "button5";
+            button5.Size = new Size(76, 51);
+            button5.TabIndex = 55;
+            button5.UseVisualStyleBackColor = true;
+            button5.Visible = false;
+            // 
+            // button6
+            // 
+            button6.Location = new Point(11, 634);
+            button6.Name = "button6";
+            button6.Size = new Size(76, 51);
+            button6.TabIndex = 54;
+            button6.UseVisualStyleBackColor = true;
+            button6.Visible = false;
+            // 
+            // button7
+            // 
+            button7.Location = new Point(11, 577);
+            button7.Name = "button7";
+            button7.Size = new Size(76, 51);
+            button7.TabIndex = 53;
+            button7.UseVisualStyleBackColor = true;
+            button7.Visible = false;
+            // 
+            // button8
+            // 
+            button8.Location = new Point(11, 520);
+            button8.Name = "button8";
+            button8.Size = new Size(76, 51);
+            button8.TabIndex = 52;
+            button8.UseVisualStyleBackColor = true;
+            button8.Visible = false;
+            // 
+            // button9
+            // 
+            button9.Location = new Point(11, 463);
+            button9.Name = "button9";
+            button9.Size = new Size(76, 51);
+            button9.TabIndex = 51;
+            button9.UseVisualStyleBackColor = true;
+            button9.Visible = false;
+            // 
+            // button10
+            // 
+            button10.Location = new Point(11, 404);
+            button10.Name = "button10";
+            button10.Size = new Size(76, 51);
+            button10.TabIndex = 50;
+            button10.UseVisualStyleBackColor = true;
+            button10.Visible = false;
+            // 
+            // button11
+            // 
+            button11.Location = new Point(11, 347);
+            button11.Name = "button11";
+            button11.Size = new Size(76, 51);
+            button11.TabIndex = 49;
+            button11.UseVisualStyleBackColor = true;
+            button11.Visible = false;
+            // 
+            // button12
+            // 
+            button12.Location = new Point(11, 290);
+            button12.Name = "button12";
+            button12.Size = new Size(76, 51);
+            button12.TabIndex = 5;
+            button12.UseVisualStyleBackColor = true;
+            button12.Visible = false;
+            // 
+            // button13
+            // 
+            button13.Location = new Point(11, 233);
+            button13.Name = "button13";
+            button13.Size = new Size(76, 51);
+            button13.TabIndex = 4;
+            button13.UseVisualStyleBackColor = true;
+            button13.Visible = false;
+            // 
+            // button14
+            // 
+            button14.Location = new Point(11, 177);
+            button14.Name = "button14";
+            button14.Size = new Size(76, 51);
+            button14.TabIndex = 3;
+            button14.UseVisualStyleBackColor = true;
+            button14.Visible = false;
+            // 
+            // button15
+            // 
+            button15.Location = new Point(11, 120);
+            button15.Name = "button15";
+            button15.Size = new Size(76, 51);
+            button15.TabIndex = 2;
+            button15.UseVisualStyleBackColor = true;
+            button15.Visible = false;
+            // 
+            // button16
+            // 
+            button16.Location = new Point(11, 63);
+            button16.Name = "button16";
+            button16.Size = new Size(76, 51);
+            button16.TabIndex = 1;
+            button16.UseVisualStyleBackColor = true;
+            button16.Visible = false;
+            // 
+            // button17
+            // 
+            button17.Location = new Point(11, 6);
+            button17.Name = "button17";
+            button17.Size = new Size(76, 51);
+            button17.TabIndex = 0;
+            button17.UseVisualStyleBackColor = true;
+            button17.Visible = false;
+            // 
             // Chess
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(982, 953);
+            ClientSize = new Size(1008, 1055);
+            Controls.Add(panelWhite);
+            Controls.Add(panelBlack);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "Chess";
             Text = "Chess";
             panel1.ResumeLayout(false);
+            panelBlack.ResumeLayout(false);
+            panelWhite.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -505,8 +911,13 @@
 
                     if (targetButton != null && targetButton != draggedButton && ValidateMove(targetButton))
                     {
-                        var currentPoint = ((PieceDetails)draggedImage.Tag).CurrentPoint;
+                        Point? currentPoint = ((PieceDetails)draggedImage.Tag).CurrentPoint;
                         ((PieceDetails)draggedImage.Tag).CurrentPoint = (Point)targetButton.Tag;
+                        if(targetButton?.Image !=null)
+                        {
+                           var pis= targetButton.Image.Tag as PieceDetails;
+                            AssignImagesToButtons(pis.Color == "WHITE" ? panelWhite : panelBlack, pis.Name);
+                        }
                         targetButton.Image = draggedImage;
 
                         if (kp.ContainsKey((Point)(draggedImage.Tag as PieceDetails).CurrentPoint))
@@ -946,9 +1357,9 @@
             }
 
             return diagPoints;
-        }      
+        }
 
-        private void PriorityMoves(string lastDragged,string targetBtn)
+        private void PriorityMoves(string lastDragged, string targetBtn)
         {
 
         }

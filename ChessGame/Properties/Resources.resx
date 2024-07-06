@@ -118,43 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="BElephant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BLACKBISHOP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\BSepoy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BLACKELEPHANT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BHorse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BLACKHORSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BKing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BLACKKING" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BKing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BMand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BLACKPAWN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BMand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BQueen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="BLACKQUEEN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BQueen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BSepoy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\BSepoy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ChessPiecesArray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\ChessPiecesArray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WElephant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\WElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WHorse" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\WHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Wking" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Wking.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WMand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="WHITEBISHOP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\WMand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WQueen" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\WQueen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WHITEELEPHANT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\WElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WSepoy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="WHITEHORSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\WHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WHITEKING" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Wking.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WHITEPAWN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\WSepoy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WHITEQUEEN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\WQueen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
