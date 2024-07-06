@@ -18,7 +18,7 @@
         private RichTextBox richTextBox1;
         private RichTextBox richTextBox2;
         private ComboBox cmbLevel;
-        private Timer timer;
+        private System.Windows.Forms.Timer timer;
         private int secondsElapsed;
         private readonly int buttonSize = 30;
 
@@ -423,7 +423,7 @@
 
         private void InitializeTimer()
         {
-            timer = new Timer
+            timer = new System.Windows.Forms.Timer
             {
                 Interval = 1000
             };
