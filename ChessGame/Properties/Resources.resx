@@ -121,14 +121,11 @@
   <data name="BLACKBISHOP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BMand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BLACKELEPHANT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\BElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BLACKHORSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\BHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="BLACKKING" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BKing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BLACKKNIGHT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\BHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BLACKPAWN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BSepoy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,25 +133,28 @@
   <data name="BLACKQUEEN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\BQueen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BLACKROOK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\BElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ChessPiecesArray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\ChessPiecesArray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WHITEBISHOP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\WMand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WHITEELEPHANT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\WElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WHITEHORSE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\WHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="WHITEKING" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Wking.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WHITEKNIGHT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\WHorse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WHITEPAWN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\WSepoy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WHITEQUEEN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\WQueen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WHITEROOK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\WElephant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -5,15 +5,15 @@
         NONE,
         WHITEKING,
         WHITEQUEEN,
-        WHITEELEPHANT,
-        WHITEHORSE,
+        WHITEROOK,
+        WHITEKNIGHT,
         WHITEBISHOP,
         WHITEPAWN,
         BLACKKING,
         BLACKQUEEN,
-        BLACKELEPHANT,
-        BLACKHORSE,
+        BLACKROOK,
+        BLACKKNIGHT,
         BLACKBISHOP,
         BLACKPAWN
-    }
+    }  
 }

@@ -98,27 +98,27 @@ namespace ChessGame
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEELEPHANT;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEELEPHANT) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEELEPHANT) };
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEROOK;
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEROOK) + i,Value=5 ,Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEROOK) };
                         }
                         if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEHORSE;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEHORSE) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEHORSE) };
+                            buttons[row, col].Image = ChessGame.Properties.Resources.WHITEKNIGHT;
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEKNIGHT) + i,Value=3, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEKNIGHT) };
                         }
                         if (buttons[row, col] == buttons[0, 2] || buttons[row, col] == buttons[0, 5])
                         {
 
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.WHITEBISHOP;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEBISHOP) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEBISHOP) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEBISHOP) + i, Value = 3, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEBISHOP) };
                         }
                         if (buttons[row, col] == buttons[0, 3])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.WHITEQUEEN;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEQUEEN), Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEQUEEN) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEQUEEN), Value = 9, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEQUEEN) };
                         }
                         if (buttons[row, col] == buttons[0, 4])
                         {
@@ -130,41 +130,41 @@ namespace ChessGame
                         {
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.WHITEPAWN;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEPAWN) + i, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEPAWN) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEPAWN) + i, Value = 1, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEPAWN) };
                         }
                         if (row == 6 && col >= 0 && col <= 7)
                         {
 
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.BLACKPAWN;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKPAWN) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKPAWN) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKPAWN) + i, Value = 1, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKPAWN) };
                         }
 
                         if (buttons[row, col] == buttons[7, 0] || buttons[row, col] == buttons[7, 7])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKELEPHANT;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKELEPHANT) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKELEPHANT) };
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKROOK;
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKROOK) + i, Value = 5, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKROOK) };
                         }
                         if (buttons[row, col] == buttons[7, 1] || buttons[row, col] == buttons[7, 6])
                         {
 
                             i += 1;
-                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKHORSE;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKHORSE) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKHORSE) };
+                            buttons[row, col].Image = ChessGame.Properties.Resources.BLACKKNIGHT;
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKKNIGHT) + i, Value = 3, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKKNIGHT) };
                         }
                         if (buttons[row, col] == buttons[7, 2] || buttons[row, col] == buttons[7, 5])
                         {
 
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.BLACKBISHOP;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKBISHOP) + i, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKBISHOP) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.BLACKBISHOP) + i, Value = 3, Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKBISHOP) };
                         }
                         if (buttons[row, col] == buttons[7, 3])
                         {
                             buttons[row, col].Image = ChessGame.Properties.Resources.BLACKQUEEN;
-                            buttons[row, col].Image.Tag = new PieceDetails { Color = "BLACK", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKQUEEN) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Color = "BLACK", Value = 3, CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.BLACKQUEEN) };
                         }
                         if (buttons[row, col] == buttons[7, 4])
                         {
@@ -1210,7 +1210,7 @@ namespace ChessGame
                         }
 
                     }
-                    else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKELEPHANT)) || draggedDetails.Name.Contains(nameof(ChessPiece.WHITEELEPHANT)))
+                    else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKROOK)) || draggedDetails.Name.Contains(nameof(ChessPiece.WHITEROOK)))
                     {
 
 
@@ -1244,7 +1244,7 @@ namespace ChessGame
                         }
 
                     }
-                    else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKHORSE)) || draggedDetails.Name.Contains(nameof(ChessPiece.WHITEHORSE)))
+                    else if (draggedDetails.Name.Contains(nameof(ChessPiece.BLACKKNIGHT)) || draggedDetails.Name.Contains(nameof(ChessPiece.WHITEKNIGHT)))
                     {
 
                         int[,] moveOffsets = new int[,]
