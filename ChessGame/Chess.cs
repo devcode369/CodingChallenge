@@ -99,14 +99,14 @@ namespace ChessGame
 
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.WHITEROOK;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEROOK) + i,Value=5 ,Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEROOK) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEROOK) + i, Value = 5, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEROOK) };
                         }
                         if (buttons[row, col] == buttons[0, 1] || buttons[row, col] == buttons[0, 6])
                         {
 
                             i += 1;
                             buttons[row, col].Image = ChessGame.Properties.Resources.WHITEKNIGHT;
-                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEKNIGHT) + i,Value=3, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEKNIGHT) };
+                            buttons[row, col].Image.Tag = new PieceDetails { Id = nameof(ChessPiece.WHITEKNIGHT) + i, Value = 3, Color = "WHITE", CurrentPoint = new Point(row, col), Name = nameof(ChessPiece.WHITEKNIGHT) };
                         }
                         if (buttons[row, col] == buttons[0, 2] || buttons[row, col] == buttons[0, 5])
                         {
@@ -213,12 +213,16 @@ namespace ChessGame
 
                 _Human = "WHITE";
                 _AI = "BLACK";
+                lblBlack.Text = "AI";
+                lblWhite.Text = "You";
             }
             else if (res == DialogResult.No)
             {
                 userColor = "BLACK";
                 _AI = "WHITE";
                 _Human = "BLACK";
+                lblBlack.Text = "You";
+                lblWhite.Text = "AI";
             }
             else if (res == DialogResult.Cancel)
             {
@@ -241,7 +245,7 @@ namespace ChessGame
                 Dictionary<int, Point> whiteColor = [];
                 Dictionary<int, Point> targetEmptyPoints = [];
                 Dictionary<string, int> movementCount = [];
-                List<(string, ((int, int), (int, int)))> lis = [];         
+                List<(string, ((int, int), (int, int)))> lis = [];
 
 
 
@@ -259,7 +263,7 @@ namespace ChessGame
                         }
                         else
                         {
-                            blackColor.Add(ctn, new Point(pt.X, pt.Y));                          
+                            blackColor.Add(ctn, new Point(pt.X, pt.Y));
                         }
                     }
                     else
@@ -271,9 +275,9 @@ namespace ChessGame
 
                 }
 
-                // possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
+            // possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
 
-           
+
 
 
             DragPoints:
@@ -286,7 +290,7 @@ namespace ChessGame
                 {
                     int fromRow = fromRandom.Next(whiteColor.Keys.Min(), whiteColor.Keys.Max());
                     _ = whiteColor.TryGetValue(fromRow, out points);
-                    possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;                  
+                    possibleMoveCount = blackColor.Count + targetEmptyPoints.Count;
                 }
                 else
                 {
@@ -358,6 +362,7 @@ namespace ChessGame
                         dataObject.SetData(DataFormats.Bitmap, targetBtn.Image);
                         if ((pis.Color == "WHITE"))
                         {
+                            CalculateScore("WHITE", pis.Value);
                             DragEventArgs dragEnterArgs = new DragEventArgs(dataObject, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.Copy);
                             panelWhite_DragEnter(panelWhite, dragEnterArgs);
 
@@ -367,6 +372,7 @@ namespace ChessGame
                         }
                         else
                         {
+                            CalculateScore("BLACK", pis.Value);
                             DragEventArgs dragEnterArgs = new DragEventArgs(dataObject, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.Copy);
                             panelBlack_DragEnter(panelBlack, dragEnterArgs);
 
@@ -384,7 +390,7 @@ namespace ChessGame
                         isAIPlay = false;
                         DisableSide(((PieceDetails)draggedImage.Tag).Color);
 
-                    }                  
+                    }
                     draggedButton = null;
                     draggedImage = null;
                     buttons[points.X, points.Y].Image = null;
@@ -410,12 +416,12 @@ namespace ChessGame
 
                         if (num < possibleMoveCount)
                         {
-                            
+
                             goto TargetEmptyPoints;
                         }
                         else
                         {
-                          
+
                             goto DragPoints;
                         }
                     }
@@ -502,7 +508,12 @@ namespace ChessGame
         }
         public void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panel1 = new Panel();
+            lblWhite = new Label();
+            lblBlack = new Label();
+            txtWhite = new RichTextBox();
+            txtBlack = new RichTextBox();
             button1 = new Button();
             panel2 = new Panel();
             panelBlack = new Panel();
@@ -539,6 +550,7 @@ namespace ChessGame
             button15 = new Button();
             button16 = new Button();
             button17 = new Button();
+            contextMenuStrip1 = new ContextMenuStrip(components);
             panel1.SuspendLayout();
             panelBlack.SuspendLayout();
             panelWhite.SuspendLayout();
@@ -547,21 +559,71 @@ namespace ChessGame
             // panel1
             // 
             panel1.AutoSize = true;
-            panel1.BackColor = SystemColors.Control;
+            panel1.BackColor = Color.Chocolate;
+            panel1.Controls.Add(lblWhite);
+            panel1.Controls.Add(lblBlack);
+            panel1.Controls.Add(txtWhite);
+            panel1.Controls.Add(txtBlack);
             panel1.Controls.Add(button1);
-            panel1.Location = new Point(117, 1);
+            panel1.Location = new Point(-3, 1);
             panel1.Name = "panel1";
-            panel1.Size = new Size(774, 38);
+            panel1.Size = new Size(1098, 82);
             panel1.TabIndex = 0;
+            // 
+            // lblWhite
+            // 
+            lblWhite.AutoSize = true;
+            lblWhite.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            lblWhite.ForeColor = Color.DarkGreen;
+            lblWhite.Location = new Point(718, 20);
+            lblWhite.Name = "lblWhite";
+            lblWhite.Size = new Size(63, 35);
+            lblWhite.TabIndex = 4;
+            lblWhite.Text = "Test";
+            // 
+            // lblBlack
+            // 
+            lblBlack.AutoSize = true;
+            lblBlack.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            lblBlack.ForeColor = Color.DarkGreen;
+            lblBlack.Location = new Point(130, 22);
+            lblBlack.Name = "lblBlack";
+            lblBlack.Size = new Size(63, 35);
+            lblBlack.TabIndex = 3;
+            lblBlack.Text = "Test";
+            // 
+            // txtWhite
+            // 
+            txtWhite.BackColor = Color.Wheat;
+            txtWhite.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            txtWhite.Location = new Point(803, 8);
+            txtWhite.Name = "txtWhite";
+            txtWhite.Size = new Size(71, 57);
+            txtWhite.TabIndex = 2;
+            txtWhite.Text = "00";
+            // 
+            // txtBlack
+            // 
+            txtBlack.BackColor = Color.Wheat;
+            txtBlack.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            txtBlack.Location = new Point(253, 11);
+            txtBlack.Name = "txtBlack";
+            txtBlack.RightToLeft = RightToLeft.No;
+            txtBlack.Size = new Size(71, 57);
+            txtBlack.TabIndex = 1;
+            txtBlack.Text = "00";
             // 
             // button1
             // 
-            button1.Location = new Point(323, 3);
+            button1.BackColor = Color.DarkGreen;
+            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button1.ForeColor = Color.Snow;
+            button1.Location = new Point(498, 11);
             button1.Name = "button1";
-            button1.Size = new Size(94, 29);
+            button1.Size = new Size(94, 57);
             button1.TabIndex = 0;
-            button1.Text = "Restart";
-            button1.UseVisualStyleBackColor = true;
+            button1.Text = "Reset";
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // panel2
@@ -575,7 +637,7 @@ namespace ChessGame
             // 
             // panelBlack
             // 
-            panelBlack.BackColor = SystemColors.Control;
+            panelBlack.BackColor = Color.Chocolate;
             panelBlack.Controls.Add(button26);
             panelBlack.Controls.Add(button27);
             panelBlack.Controls.Add(button28);
@@ -592,16 +654,16 @@ namespace ChessGame
             panelBlack.Controls.Add(button20);
             panelBlack.Controls.Add(button19);
             panelBlack.Controls.Add(button18);
-            panelBlack.Location = new Point(12, 52);
+            panelBlack.Location = new Point(-3, 89);
             panelBlack.Name = "panelBlack";
-            panelBlack.Size = new Size(99, 928);
+            panelBlack.Size = new Size(93, 967);
             panelBlack.TabIndex = 2;
             panelBlack.DragDrop += panelBlack_DragDrop;
             panelBlack.DragEnter += panelBlack_DragEnter;
             // 
             // button26
             // 
-            button26.BackColor = SystemColors.ControlLight;
+            button26.BackColor = Color.Chocolate;
             button26.Location = new Point(11, 861);
             button26.Name = "button26";
             button26.Size = new Size(76, 51);
@@ -611,7 +673,7 @@ namespace ChessGame
             // 
             // button27
             // 
-            button27.BackColor = SystemColors.ControlLight;
+            button27.BackColor = Color.Chocolate;
             button27.Location = new Point(11, 804);
             button27.Name = "button27";
             button27.Size = new Size(76, 51);
@@ -621,7 +683,7 @@ namespace ChessGame
             // 
             // button28
             // 
-            button28.BackColor = SystemColors.ControlLight;
+            button28.BackColor = Color.Chocolate;
             button28.Location = new Point(11, 747);
             button28.Name = "button28";
             button28.Size = new Size(76, 51);
@@ -631,7 +693,7 @@ namespace ChessGame
             // 
             // button29
             // 
-            button29.BackColor = SystemColors.ControlLight;
+            button29.BackColor = Color.Chocolate;
             button29.Location = new Point(11, 690);
             button29.Name = "button29";
             button29.Size = new Size(76, 52);
@@ -641,7 +703,7 @@ namespace ChessGame
             // 
             // button30
             // 
-            button30.BackColor = SystemColors.ControlLight;
+            button30.BackColor = Color.Chocolate;
             button30.Location = new Point(11, 634);
             button30.Name = "button30";
             button30.Size = new Size(76, 52);
@@ -651,7 +713,7 @@ namespace ChessGame
             // 
             // button31
             // 
-            button31.BackColor = SystemColors.ControlLight;
+            button31.BackColor = Color.Chocolate;
             button31.Location = new Point(11, 577);
             button31.Name = "button31";
             button31.Size = new Size(76, 52);
@@ -661,7 +723,7 @@ namespace ChessGame
             // 
             // button32
             // 
-            button32.BackColor = SystemColors.ControlLight;
+            button32.BackColor = Color.Chocolate;
             button32.Location = new Point(11, 520);
             button32.Name = "button32";
             button32.Size = new Size(76, 52);
@@ -671,7 +733,7 @@ namespace ChessGame
             // 
             // button33
             // 
-            button33.BackColor = SystemColors.ControlLight;
+            button33.BackColor = Color.Chocolate;
             button33.Location = new Point(11, 463);
             button33.Name = "button33";
             button33.Size = new Size(76, 52);
@@ -681,7 +743,7 @@ namespace ChessGame
             // 
             // button25
             // 
-            button25.BackColor = SystemColors.ControlLight;
+            button25.BackColor = Color.Chocolate;
             button25.Location = new Point(11, 404);
             button25.Name = "button25";
             button25.Size = new Size(76, 52);
@@ -691,7 +753,7 @@ namespace ChessGame
             // 
             // button24
             // 
-            button24.BackColor = SystemColors.ControlLight;
+            button24.BackColor = Color.Chocolate;
             button24.Location = new Point(11, 347);
             button24.Name = "button24";
             button24.Size = new Size(76, 52);
@@ -701,7 +763,7 @@ namespace ChessGame
             // 
             // button23
             // 
-            button23.BackColor = SystemColors.ControlLight;
+            button23.BackColor = Color.Chocolate;
             button23.Location = new Point(11, 290);
             button23.Name = "button23";
             button23.Size = new Size(76, 52);
@@ -711,7 +773,7 @@ namespace ChessGame
             // 
             // button22
             // 
-            button22.BackColor = SystemColors.ControlLight;
+            button22.BackColor = Color.Chocolate;
             button22.Location = new Point(11, 233);
             button22.Name = "button22";
             button22.Size = new Size(76, 52);
@@ -721,7 +783,7 @@ namespace ChessGame
             // 
             // button21
             // 
-            button21.BackColor = SystemColors.ControlLight;
+            button21.BackColor = Color.Chocolate;
             button21.Location = new Point(11, 177);
             button21.Name = "button21";
             button21.Size = new Size(76, 52);
@@ -731,7 +793,7 @@ namespace ChessGame
             // 
             // button20
             // 
-            button20.BackColor = SystemColors.ControlLight;
+            button20.BackColor = Color.Chocolate;
             button20.Location = new Point(11, 120);
             button20.Name = "button20";
             button20.Size = new Size(76, 52);
@@ -741,7 +803,7 @@ namespace ChessGame
             // 
             // button19
             // 
-            button19.BackColor = SystemColors.ControlLight;
+            button19.BackColor = Color.Chocolate;
             button19.Location = new Point(11, 63);
             button19.Name = "button19";
             button19.Size = new Size(76, 52);
@@ -751,17 +813,17 @@ namespace ChessGame
             // 
             // button18
             // 
-            button18.BackColor = SystemColors.ControlLight;
+            button18.BackColor = Color.Chocolate;
             button18.Location = new Point(11, 6);
             button18.Name = "button18";
-            button18.Size = new Size(76, 52);
+            button18.Size = new Size(76, 53);
             button18.TabIndex = 0;
             button18.UseVisualStyleBackColor = false;
             button18.Visible = false;
             // 
             // panelWhite
             // 
-            panelWhite.BackColor = SystemColors.Control;
+            panelWhite.BackColor = Color.Chocolate;
             panelWhite.Controls.Add(button2);
             panelWhite.Controls.Add(button3);
             panelWhite.Controls.Add(button4);
@@ -778,16 +840,16 @@ namespace ChessGame
             panelWhite.Controls.Add(button15);
             panelWhite.Controls.Add(button16);
             panelWhite.Controls.Add(button17);
-            panelWhite.Location = new Point(897, 52);
+            panelWhite.Location = new Point(1004, 89);
             panelWhite.Name = "panelWhite";
-            panelWhite.Size = new Size(99, 928);
+            panelWhite.Size = new Size(91, 967);
             panelWhite.TabIndex = 59;
             panelWhite.DragDrop += panelWhite_DragDrop;
             panelWhite.DragEnter += panelWhite_DragEnter;
             // 
             // button2
             // 
-            button2.BackColor = SystemColors.ControlLight;
+            button2.BackColor = Color.Chocolate;
             button2.Location = new Point(11, 861);
             button2.Name = "button2";
             button2.Size = new Size(76, 51);
@@ -797,7 +859,7 @@ namespace ChessGame
             // 
             // button3
             // 
-            button3.BackColor = SystemColors.ControlLight;
+            button3.BackColor = Color.Chocolate;
             button3.Location = new Point(11, 804);
             button3.Name = "button3";
             button3.Size = new Size(76, 51);
@@ -807,7 +869,7 @@ namespace ChessGame
             // 
             // button4
             // 
-            button4.BackColor = SystemColors.ControlLight;
+            button4.BackColor = Color.Chocolate;
             button4.Location = new Point(11, 747);
             button4.Name = "button4";
             button4.Size = new Size(76, 51);
@@ -817,7 +879,7 @@ namespace ChessGame
             // 
             // button5
             // 
-            button5.BackColor = SystemColors.ControlLight;
+            button5.BackColor = Color.Chocolate;
             button5.Location = new Point(11, 690);
             button5.Name = "button5";
             button5.Size = new Size(76, 51);
@@ -827,7 +889,7 @@ namespace ChessGame
             // 
             // button6
             // 
-            button6.BackColor = SystemColors.ControlLight;
+            button6.BackColor = Color.Chocolate;
             button6.Location = new Point(11, 634);
             button6.Name = "button6";
             button6.Size = new Size(76, 51);
@@ -837,7 +899,7 @@ namespace ChessGame
             // 
             // button7
             // 
-            button7.BackColor = SystemColors.ControlLight;
+            button7.BackColor = Color.Chocolate;
             button7.Location = new Point(11, 577);
             button7.Name = "button7";
             button7.Size = new Size(76, 51);
@@ -847,7 +909,7 @@ namespace ChessGame
             // 
             // button8
             // 
-            button8.BackColor = SystemColors.ControlLight;
+            button8.BackColor = Color.Chocolate;
             button8.Location = new Point(11, 520);
             button8.Name = "button8";
             button8.Size = new Size(76, 51);
@@ -857,7 +919,7 @@ namespace ChessGame
             // 
             // button9
             // 
-            button9.BackColor = SystemColors.ControlLight;
+            button9.BackColor = Color.Chocolate;
             button9.Location = new Point(11, 463);
             button9.Name = "button9";
             button9.Size = new Size(76, 51);
@@ -867,7 +929,7 @@ namespace ChessGame
             // 
             // button10
             // 
-            button10.BackColor = SystemColors.ControlLight;
+            button10.BackColor = Color.Chocolate;
             button10.Location = new Point(11, 404);
             button10.Name = "button10";
             button10.Size = new Size(76, 51);
@@ -877,7 +939,7 @@ namespace ChessGame
             // 
             // button11
             // 
-            button11.BackColor = SystemColors.ControlLight;
+            button11.BackColor = Color.Chocolate;
             button11.Location = new Point(11, 347);
             button11.Name = "button11";
             button11.Size = new Size(76, 51);
@@ -887,7 +949,7 @@ namespace ChessGame
             // 
             // button12
             // 
-            button12.BackColor = SystemColors.ControlLight;
+            button12.BackColor = Color.Chocolate;
             button12.Location = new Point(11, 290);
             button12.Name = "button12";
             button12.Size = new Size(76, 51);
@@ -897,7 +959,7 @@ namespace ChessGame
             // 
             // button13
             // 
-            button13.BackColor = SystemColors.ControlLight;
+            button13.BackColor = Color.Chocolate;
             button13.Location = new Point(11, 233);
             button13.Name = "button13";
             button13.Size = new Size(76, 51);
@@ -907,7 +969,7 @@ namespace ChessGame
             // 
             // button14
             // 
-            button14.BackColor = SystemColors.ControlLight;
+            button14.BackColor = Color.Chocolate;
             button14.Location = new Point(11, 177);
             button14.Name = "button14";
             button14.Size = new Size(76, 51);
@@ -917,7 +979,7 @@ namespace ChessGame
             // 
             // button15
             // 
-            button15.BackColor = SystemColors.ControlLight;
+            button15.BackColor = Color.Chocolate;
             button15.Location = new Point(11, 120);
             button15.Name = "button15";
             button15.Size = new Size(76, 51);
@@ -927,7 +989,7 @@ namespace ChessGame
             // 
             // button16
             // 
-            button16.BackColor = SystemColors.ControlLight;
+            button16.BackColor = Color.Chocolate;
             button16.Location = new Point(11, 63);
             button16.Name = "button16";
             button16.Size = new Size(76, 51);
@@ -937,7 +999,7 @@ namespace ChessGame
             // 
             // button17
             // 
-            button17.BackColor = SystemColors.ControlLight;
+            button17.BackColor = Color.Chocolate;
             button17.Location = new Point(11, 6);
             button17.Name = "button17";
             button17.Size = new Size(76, 51);
@@ -945,11 +1007,18 @@ namespace ChessGame
             button17.UseVisualStyleBackColor = false;
             button17.Visible = false;
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
+            // 
             // Chess
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1008, 1055);
+            BackColor = Color.PeachPuff;
+            ClientSize = new Size(1094, 1055);
             Controls.Add(panelWhite);
             Controls.Add(panelBlack);
             Controls.Add(panel2);
@@ -957,6 +1026,7 @@ namespace ChessGame
             Name = "Chess";
             Text = "Chess";
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             panelBlack.ResumeLayout(false);
             panelWhite.ResumeLayout(false);
             ResumeLayout(false);
@@ -1023,6 +1093,7 @@ namespace ChessGame
                             dataObject.SetData(DataFormats.Bitmap, targetButton.Image);
                             if ((pis.Color == "WHITE"))
                             {
+                                CalculateScore("WHITE", pis.Value);
                                 DragEventArgs dragEnterArgs = new DragEventArgs(dataObject, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.Copy);
                                 panelWhite_DragEnter(panelWhite, dragEnterArgs);
 
@@ -1032,6 +1103,7 @@ namespace ChessGame
                             }
                             else
                             {
+                                CalculateScore("BLACK", pis.Value);
                                 DragEventArgs dragEnterArgs = new DragEventArgs(dataObject, 0, 0, 0, DragDropEffects.Copy, DragDropEffects.Copy);
                                 panelBlack_DragEnter(panelBlack, dragEnterArgs);
 
@@ -1056,7 +1128,7 @@ namespace ChessGame
                             DisableSide(((PieceDetails)draggedImage.Tag).Color);
                             return;
                         }
-                
+
                     }
                     else
                     {
@@ -1496,13 +1568,13 @@ namespace ChessGame
         {
             if (e.Data.GetDataPresent(DataFormats.Bitmap))
             {
-                Bitmap droppedImage = (Bitmap)e.Data.GetData(DataFormats.Bitmap);               
+                Bitmap droppedImage = (Bitmap)e.Data.GetData(DataFormats.Bitmap);
                 var button = GetEmptyButtonFromPanel(panelBlack);
 
                 button.Image = droppedImage;
                 button.Visible = true;
-               // button.BackColor = Color.Wheat;
-                button.BackgroundImageLayout = ImageLayout.Stretch;         
+                // button.BackColor = Color.Wheat;
+                button.BackgroundImageLayout = ImageLayout.Stretch;
             }
         }
 
@@ -1519,15 +1591,15 @@ namespace ChessGame
         }
 
         private void panelWhite_DragDrop(object sender, DragEventArgs e)
-        {       
+        {
             if (e.Data.GetDataPresent(DataFormats.Bitmap))
             {
 
-                Bitmap droppedImage = (Bitmap)e.Data.GetData(DataFormats.Bitmap);                
+                Bitmap droppedImage = (Bitmap)e.Data.GetData(DataFormats.Bitmap);
                 var button = GetEmptyButtonFromPanel(panelWhite);
                 button.Image = droppedImage;
                 button.Visible = true;
-              //  button.BackColor = Color.Wheat;
+                //  button.BackColor = Color.Wheat;
                 button.BackgroundImageLayout = ImageLayout.Stretch;
             }
         }
@@ -1544,7 +1616,7 @@ namespace ChessGame
             }
         }
 
-       private bool AreAllValues(Dictionary<string, int> dict,int colorPieceCount,int possibleMove)
+        private bool AreAllValues(Dictionary<string, int> dict, int colorPieceCount, int possibleMove)
         {
             int totalCount = 0;
             foreach (var kvp in dict)
@@ -1559,5 +1631,22 @@ namespace ChessGame
             return totalCount == colorPieceCount;
         }
 
+        private void CalculateScore(string color, int point)
+        {
+            if(color=="WHITE")
+            {
+                if(int.TryParse(txtWhite.Text,out var result))
+                {
+                    txtWhite.Text = Convert.ToString(result + point);
+                }               
+            }
+            else if(color == "BLACK")
+            {
+                if (int.TryParse(txtBlack.Text, out var result))
+                {
+                    txtBlack.Text = Convert.ToString(result + point);
+                }             
+            }
+        }
     }
 }

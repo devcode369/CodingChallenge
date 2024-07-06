@@ -65,5 +65,10 @@
         private Button button16;
         private Button button17;
         private Button button2;
+        private RichTextBox txtWhite;
+        private RichTextBox txtBlack;
+        private Label lblWhite;
+        private Label lblBlack;
+        private ContextMenuStrip contextMenuStrip1;
     }
 }
